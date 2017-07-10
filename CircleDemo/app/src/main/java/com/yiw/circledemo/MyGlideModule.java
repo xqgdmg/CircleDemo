@@ -13,6 +13,7 @@ import java.io.File;
 /**
  * Created by suneee on 2016/6/6.
  * Glide 磁盘缓存路径和大小
+ * Glide 提供 GlideModule 用来设置磁盘缓存大小和路径
  */
 public class MyGlideModule implements GlideModule {
 
