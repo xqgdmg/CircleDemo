@@ -32,7 +32,7 @@ import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
-import com.yiw.circledemo.mvp.presenter.CircleActions;
+import com.yiw.circledemo.mvp.manager.CircleActions;
 import com.yiw.circledemo.mvp.presenter.CirclePresenter;
 import com.yiw.circledemo.utils.CommonUtils;
 import com.yiw.circledemo.utils.DatasUtil;

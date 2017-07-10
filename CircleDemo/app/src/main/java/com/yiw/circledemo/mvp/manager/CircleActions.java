@@ -1,4 +1,4 @@
-package com.yiw.circledemo.mvp.presenter;
+package com.yiw.circledemo.mvp.manager;
 
 import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
@@ -10,7 +10,9 @@ import com.yiw.circledemo.mvp.presenter.BasePresenter;
 import java.util.List;
 
 /**
- * Created by suneee on 2016/7/15.
+ * View extends BaseView
+ * Presenter extends BasePresenter
+ * 这种写法真是。。。。怎么想的
  */
 public interface CircleActions {
 
