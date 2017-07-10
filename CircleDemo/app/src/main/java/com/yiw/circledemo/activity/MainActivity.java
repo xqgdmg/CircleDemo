@@ -63,20 +63,17 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 	private LinearLayout edittextbody;
 	private EditText editText;
 	private ImageView sendIv;
-
 	private int screenHeight;
 	private int editTextBodyHeight;
 	private int currentKeyboardH;
 	private int selectCircleItemH;
 	private int selectCommentItemOffset;
-
 	private CirclePresenter presenter;
 	private CommentConfig commentConfig;
 	private SuperRecyclerView recyclerView;
 	private RelativeLayout bodyLayout;
 	private LinearLayoutManager layoutManager;
     private TitleBar titleBar;
-
     private final static int TYPE_PULLREFRESH = 1;
     private final static int TYPE_UPLOADREFRESH = 2;
     private UpLoadDialog uploadDialog;
@@ -104,13 +101,10 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 
 
 	private void initPermission() {
-        String[] perms = {Manifest.permission.CALL_PHONE
-                , Manifest.permission.WRITE_EXTERNAL_STORAGE
-                , Manifest.permission.READ_EXTERNAL_STORAGE};
+        String[] perms = {Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
-            // ...
         } else {
             // Do not have permissions, request them now
             EasyPermissions.requestPermissions(this, "因为功能需要，需要使用相关权限，请允许",
@@ -220,7 +214,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
         TextView textView = (TextView) titleBar.addAction(new TitleBar.TextAction("发布视频") {
             @Override
             public void performAction(View view) {
-                //Toast.makeText(MainActivity.this, "敬请期待...", Toast.LENGTH_SHORT).show();
 
 				QPManager.startRecordActivity(MainActivity.this);
             }
@@ -285,7 +278,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
            if(edittextbody != null && edittextbody.getVisibility() == View.VISIBLE){
-        	   //edittextbody.setVisibility(View.GONE);
 			   updateEditTextBodyVisible(View.GONE, null);
         	   return true;
            }
@@ -300,7 +292,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 			if(circleId.equals(circleItems.get(i).getId())){
 				circleItems.remove(i);
 				circleAdapter.notifyDataSetChanged();
-				//circleAdapter.notifyItemRemoved(i+1);
 				return;
 			}
 		}
@@ -312,7 +303,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
             item.getFavorters().add(addItem);
 			circleAdapter.notifyDataSetChanged();
-            //circleAdapter.notifyItemChanged(circlePosition+1);
 		}
 	}
 
@@ -324,7 +314,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 			if(favortId.equals(items.get(i).getId())){
 				items.remove(i);
 				circleAdapter.notifyDataSetChanged();
-                //circleAdapter.notifyItemChanged(circlePosition+1);
 				return;
 			}
 		}
@@ -336,7 +325,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
             item.getComments().add(addItem);
 			circleAdapter.notifyDataSetChanged();
-            //circleAdapter.notifyItemChanged(circlePosition+1);
 		}
 		//清空评论文本
 		 editText.setText("");
@@ -507,14 +495,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
                 }
             });
 
-			/**
-			 * 清除草稿,草稿文件将会删除。所以在这之前我们执行拷贝move操作。
-			 * 上面的拷贝操作请自行实现，第一版本的copyVideoFile接口不再使用
-			 */
-            /*QupaiService qupaiService = QupaiManager
-                    .getQupaiService(MainActivity.this);
-            qupaiService.deleteDraft(getApplicationContext(),data);*/
-
 		} else {
 			if (resultCode == RESULT_CANCELED) {
 				Toast.makeText(MainActivity.this, "RESULT_CANCELED", Toast.LENGTH_LONG).show();
@@ -524,35 +504,22 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 
 	@Override
 	public void showLoading(String msg) {
-
 	}
 
 	@Override
 	public void hideLoading() {
-
 	}
 
 	@Override
 	public void showError(String errorMsg) {
-
 	}
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        //Toast.makeText(this, "onPermissionsGranted  requestCode: " + requestCode , Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         Toast.makeText(this, "您拒绝了相关权限，可能会导致相关功能不可用" , Toast.LENGTH_LONG).show();
-        /*if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this, getString(R.string.rationale_ask_again))
-                    .setTitle(getString(R.string.title_settings_dialog))
-                    .setPositiveButton(getString(R.string.setting))
-                    .setNegativeButton(getString(R.string.cancel), null *//* click listener *//*)
-                    .setRequestCode(RC_SETTINGS_SCREEN)
-                    .build()
-                    .show();
-        }*/
     }
 }

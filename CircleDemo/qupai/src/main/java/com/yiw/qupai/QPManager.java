@@ -162,8 +162,7 @@ public class QPManager {
         QupaiService qupaiService = QupaiManager.getQupaiService(activity.getApplicationContext());
 
         if (qupaiService == null) {
-            Toast.makeText(activity.getApplicationContext(), "插件没有初始化，无法获取 QupaiService",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(activity.getApplicationContext(), "插件没有初始化，无法获取 QupaiService",Toast.LENGTH_LONG).show();
             return;
         }
 
