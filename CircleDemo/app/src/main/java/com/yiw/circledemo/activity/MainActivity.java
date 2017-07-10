@@ -214,7 +214,6 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
         TextView textView = (TextView) titleBar.addAction(new TitleBar.TextAction("发布视频") {
             @Override
             public void performAction(View view) {
-
 				QPManager.startRecordActivity(MainActivity.this);
             }
         });

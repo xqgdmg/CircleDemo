@@ -8,6 +8,10 @@ import android.widget.TextView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.yiw.circledemo.R;
 
+/*
+ * 上传视频
+ * acess_token无效，趣拍
+ */
 public class UpLoadDialog extends Dialog {
 
 	private TextView dialogLoadingText;
