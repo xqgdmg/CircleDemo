@@ -71,7 +71,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 	private CirclePresenter presenter;
 	private CommentConfig commentConfig;
 	private SuperRecyclerView recyclerView;
-	private RelativeLayout bodyLayout;
+	private RelativeLayout rlOrigin;
 	private LinearLayoutManager layoutManager;
     private TitleBar titleBar;
     private final static int TYPE_PULLREFRESH = 1;
@@ -224,21 +224,21 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 
 
     private void setViewTreeObserver() {
-		bodyLayout = (RelativeLayout) findViewById(R.id.bodyLayout);
-		final ViewTreeObserver viewTreeObserver = bodyLayout.getViewTreeObserver();
+		rlOrigin = (RelativeLayout) findViewById(R.id.rlOrigin);
+		final ViewTreeObserver viewTreeObserver = rlOrigin.getViewTreeObserver();
 		viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
             public void onGlobalLayout() {
-                Rect r = new Rect();
-				bodyLayout.getWindowVisibleDisplayFrame(r);
+                Rect rect = new Rect();
+				rlOrigin.getWindowVisibleDisplayFrame(rect);
 				int statusBarH =  getStatusBarHeight();//状态栏高度
-                int screenH = bodyLayout.getRootView().getHeight();
-				if(r.top != statusBarH ){
+                int screenH = rlOrigin.getRootView().getHeight();
+				if(rect.top != statusBarH ){
 					//在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
-					r.top = statusBarH;
+					rect.top = statusBarH;
 				}
-                int keyboardH = screenH - (r.bottom - r.top);
-				Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = " + keyboardH + " &r.bottom=" + r.bottom + " &top=" + r.top + " &statusBarH=" + statusBarH);
+                int keyboardH = screenH - (rect.bottom - rect.top);
+				Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = " + keyboardH + " &rect.bottom=" + rect.bottom + " &top=" + rect.top + " &statusBarH=" + statusBarH);
 
                 if(keyboardH == currentKeyboardH){//有变化时才处理，否则会陷入死循环
                 	return;
