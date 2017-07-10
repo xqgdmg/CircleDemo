@@ -1,12 +1,12 @@
-package com.yiw.circledemo.widgets.videolist.visibility.calculator;
+package com.yiw.circledemo.videolist.visibility.calculator;
 
 import android.util.Log;
 import android.view.View;
 
-import com.yiw.circledemo.widgets.videolist.visibility.items.ListItem;
-import com.yiw.circledemo.widgets.videolist.visibility.items.ListItemData;
-import com.yiw.circledemo.widgets.videolist.visibility.scroll.ItemsPositionGetter;
-import com.yiw.circledemo.widgets.videolist.visibility.scroll.ItemsProvider;
+import com.yiw.circledemo.videolist.visibility.items.ListItem;
+import com.yiw.circledemo.videolist.visibility.items.ListItemData;
+import com.yiw.circledemo.videolist.visibility.scroll.ItemsPositionGetter;
+import com.yiw.circledemo.videolist.visibility.scroll.ItemsProvider;
 
 
 /**

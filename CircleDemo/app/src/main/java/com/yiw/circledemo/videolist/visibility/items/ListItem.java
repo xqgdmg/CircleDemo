@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist.visibility.items;
+package com.yiw.circledemo.videolist.visibility.items;
 
 import android.view.View;
 

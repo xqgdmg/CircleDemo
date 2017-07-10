@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist.target;
+package com.yiw.circledemo.videolist.target;
 
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -7,8 +7,8 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.target.ViewTarget;
-import com.yiw.circledemo.widgets.videolist.model.VideoLoadMvpView;
-import com.yiw.circledemo.widgets.videolist.widget.TextureVideoView;
+import com.yiw.circledemo.videolist.model.VideoLoadMvpView;
+import com.yiw.circledemo.videolist.widget.TextureVideoView;
 
 import java.io.File;
 

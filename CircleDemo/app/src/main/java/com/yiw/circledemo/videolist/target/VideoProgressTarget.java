@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist.target;
+package com.yiw.circledemo.videolist.target;
 
 import android.view.View;
 

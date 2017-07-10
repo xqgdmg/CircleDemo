@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist.visibility.scroll;
+package com.yiw.circledemo.videolist.visibility.scroll;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist.widget;
+package com.yiw.circledemo.videolist.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;

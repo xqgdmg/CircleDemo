@@ -1,8 +1,8 @@
-package com.yiw.circledemo.widgets.videolist.model;
+package com.yiw.circledemo.videolist.model;
 
 import android.media.MediaPlayer;
 
-import com.yiw.circledemo.widgets.videolist.widget.TextureVideoView;
+import com.yiw.circledemo.videolist.widget.TextureVideoView;
 
 
 /**

@@ -1,7 +1,7 @@
-package com.yiw.circledemo.widgets.videolist.visibility.scroll;
+package com.yiw.circledemo.videolist.visibility.scroll;
 
 
-import com.yiw.circledemo.widgets.videolist.visibility.items.ListItem;
+import com.yiw.circledemo.videolist.visibility.items.ListItem;
 
 /**
  * This interface is used by {@link com.waynell.videolist.visibility.calculator.SingleListViewItemActiveCalculator}.

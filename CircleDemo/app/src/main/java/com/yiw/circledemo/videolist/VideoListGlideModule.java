@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist;
+package com.yiw.circledemo.videolist;
 
 import android.content.Context;
 import android.os.Handler;

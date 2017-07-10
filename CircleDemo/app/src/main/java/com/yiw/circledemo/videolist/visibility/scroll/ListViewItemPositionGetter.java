@@ -1,4 +1,4 @@
-package com.yiw.circledemo.widgets.videolist.visibility.scroll;
+package com.yiw.circledemo.videolist.visibility.scroll;
 
 import android.view.View;
 import android.widget.ListView;

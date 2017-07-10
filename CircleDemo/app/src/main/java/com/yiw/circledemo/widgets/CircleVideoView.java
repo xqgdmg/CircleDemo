@@ -17,12 +17,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.yiw.circledemo.R;
-import com.yiw.circledemo.widgets.videolist.VideoListGlideModule;
-import com.yiw.circledemo.widgets.videolist.model.VideoLoadMvpView;
-import com.yiw.circledemo.widgets.videolist.target.VideoLoadTarget;
-import com.yiw.circledemo.widgets.videolist.target.VideoProgressTarget;
-import com.yiw.circledemo.widgets.videolist.visibility.items.ListItem;
-import com.yiw.circledemo.widgets.videolist.widget.TextureVideoView;
+import com.yiw.circledemo.videolist.VideoListGlideModule;
+import com.yiw.circledemo.videolist.model.VideoLoadMvpView;
+import com.yiw.circledemo.videolist.target.VideoLoadTarget;
+import com.yiw.circledemo.videolist.target.VideoProgressTarget;
+import com.yiw.circledemo.videolist.visibility.items.ListItem;
+import com.yiw.circledemo.videolist.widget.TextureVideoView;
 
 import java.io.File;
 import java.io.InputStream;

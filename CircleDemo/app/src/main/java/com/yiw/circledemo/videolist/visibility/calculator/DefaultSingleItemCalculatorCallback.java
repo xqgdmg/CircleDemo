@@ -1,8 +1,8 @@
-package com.yiw.circledemo.widgets.videolist.visibility.calculator;
+package com.yiw.circledemo.videolist.visibility.calculator;
 
 import android.view.View;
 
-import com.yiw.circledemo.widgets.videolist.visibility.items.ListItem;
+import com.yiw.circledemo.videolist.visibility.items.ListItem;
 
 
 /**

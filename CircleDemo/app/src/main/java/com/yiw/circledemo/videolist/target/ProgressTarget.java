@@ -1,11 +1,11 @@
-package com.yiw.circledemo.widgets.videolist.target;
+package com.yiw.circledemo.videolist.target;
 
 import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.Target;
-import com.yiw.circledemo.widgets.videolist.VideoListGlideModule;
+import com.yiw.circledemo.videolist.VideoListGlideModule;
 
 /**
  * @author Wayne

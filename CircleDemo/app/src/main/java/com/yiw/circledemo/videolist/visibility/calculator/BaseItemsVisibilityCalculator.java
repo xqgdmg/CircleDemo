@@ -1,9 +1,9 @@
-package com.yiw.circledemo.widgets.videolist.visibility.calculator;
+package com.yiw.circledemo.videolist.visibility.calculator;
 
 import android.widget.AbsListView;
 
-import com.yiw.circledemo.widgets.videolist.visibility.scroll.ItemsPositionGetter;
-import com.yiw.circledemo.widgets.videolist.visibility.scroll.ScrollDirectionDetector;
+import com.yiw.circledemo.videolist.visibility.scroll.ItemsPositionGetter;
+import com.yiw.circledemo.videolist.visibility.scroll.ScrollDirectionDetector;
 
 
 /**

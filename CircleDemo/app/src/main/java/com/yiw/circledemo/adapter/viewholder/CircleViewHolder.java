@@ -13,8 +13,8 @@ import com.yiw.circledemo.widgets.CommentListView;
 import com.yiw.circledemo.widgets.ExpandTextView;
 import com.yiw.circledemo.widgets.PraiseListView;
 import com.yiw.circledemo.widgets.SnsPopupWindow;
-import com.yiw.circledemo.widgets.videolist.model.VideoLoadMvpView;
-import com.yiw.circledemo.widgets.videolist.widget.TextureVideoView;
+import com.yiw.circledemo.videolist.model.VideoLoadMvpView;
+import com.yiw.circledemo.videolist.widget.TextureVideoView;
 
 /**
  * Created by yiw on 2016/8/16.
