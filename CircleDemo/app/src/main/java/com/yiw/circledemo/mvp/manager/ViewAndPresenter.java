@@ -14,7 +14,7 @@ import java.util.List;
  * Presenter extends BasePresenter
  * 这种写法真是。。。。怎么想的
  */
-public interface CircleActions {
+public interface ViewAndPresenter {
 
     interface View extends BaseView {
         void update2DeleteCircle(String circleId);

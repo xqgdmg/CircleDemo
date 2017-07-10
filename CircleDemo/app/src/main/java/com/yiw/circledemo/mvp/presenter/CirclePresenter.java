@@ -6,7 +6,7 @@ import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
-import com.yiw.circledemo.mvp.manager.CircleActions;
+import com.yiw.circledemo.mvp.manager.ViewAndPresenter;
 import com.yiw.circledemo.mvp.modle.CircleModel;
 import com.yiw.circledemo.listener.IDataRequestListener;
 import com.yiw.circledemo.utils.DatasUtil;
@@ -21,11 +21,11 @@ import java.util.List;
 * @date 2015-12-28 下午4:06:03 
 *
  */
-public class CirclePresenter implements CircleActions.Presenter{
+public class CirclePresenter implements ViewAndPresenter.Presenter{
 	private CircleModel circleModel;
-	private CircleActions.View view;
+	private ViewAndPresenter.View view;
 
-	public CirclePresenter(CircleActions.View view){
+	public CirclePresenter(ViewAndPresenter.View view){
 		circleModel = new CircleModel();
 		this.view = view;
 	}

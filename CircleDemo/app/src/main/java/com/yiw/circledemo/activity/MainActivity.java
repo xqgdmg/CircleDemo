@@ -32,7 +32,7 @@ import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
-import com.yiw.circledemo.mvp.manager.CircleActions;
+import com.yiw.circledemo.mvp.manager.ViewAndPresenter;
 import com.yiw.circledemo.mvp.presenter.CirclePresenter;
 import com.yiw.circledemo.utils.CommonUtils;
 import com.yiw.circledemo.utils.DatasUtil;
@@ -56,11 +56,11 @@ import pub.devrel.easypermissions.EasyPermissions;
 * @date 2015-12-28 下午4:21:18 
 *
  */
-public class MainActivity extends YWActivity implements CircleActions.View, EasyPermissions.PermissionCallbacks {
+public class MainActivity extends YWActivity implements ViewAndPresenter.View, EasyPermissions.PermissionCallbacks {
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	private CircleAdapter circleAdapter;
-	private LinearLayout edittextbody;
+	private LinearLayout llEditComment;
 	private EditText editText;
 	private ImageView sendIv;
 	private int screenHeight;
@@ -135,7 +135,7 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 		recyclerView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if (edittextbody.getVisibility() == View.VISIBLE) {
+				if (llEditComment.getVisibility() == View.VISIBLE) {
 					updateEditTextBodyVisible(View.GONE, null);
 					return true;
 				}
@@ -177,8 +177,9 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 		circleAdapter = new CircleAdapter(this);
 		circleAdapter.setCirclePresenter(presenter);
         recyclerView.setAdapter(circleAdapter);
-		
-		edittextbody = (LinearLayout) findViewById(R.id.editTextBodyLl);
+
+		 // 显示隐藏评论框
+		llEditComment = (LinearLayout) findViewById(R.id.llEditComment);
 		editText = (EditText) findViewById(R.id.circleEt);
 		sendIv = (ImageView) findViewById(R.id.sendIv);
 		sendIv.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +198,7 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 			}
 		});
 
+		 // 监听布局的变化
 		setViewTreeObserver();
 	}
 
@@ -223,11 +225,10 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 
     private void setViewTreeObserver() {
 		bodyLayout = (RelativeLayout) findViewById(R.id.bodyLayout);
-		final ViewTreeObserver swipeRefreshLayoutVTO = bodyLayout.getViewTreeObserver();
-		swipeRefreshLayoutVTO.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+		final ViewTreeObserver viewTreeObserver = bodyLayout.getViewTreeObserver();
+		viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
             public void onGlobalLayout() {
-            	
                 Rect r = new Rect();
 				bodyLayout.getWindowVisibleDisplayFrame(r);
 				int statusBarH =  getStatusBarHeight();//状态栏高度
@@ -245,7 +246,7 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 
 				currentKeyboardH = keyboardH;
             	screenHeight = screenH;//应用屏幕的高度
-            	editTextBodyHeight = edittextbody.getHeight();
+            	editTextBodyHeight = llEditComment.getHeight();
 
                 if(keyboardH<150){//说明是隐藏键盘的情况
                     updateEditTextBodyVisible(View.GONE, null);
@@ -276,7 +277,7 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-           if(edittextbody != null && edittextbody.getVisibility() == View.VISIBLE){
+           if(llEditComment != null && llEditComment.getVisibility() == View.VISIBLE){
 			   updateEditTextBodyVisible(View.GONE, null);
         	   return true;
            }
@@ -346,7 +347,7 @@ public class MainActivity extends YWActivity implements CircleActions.View, Easy
 	@Override
 	public void updateEditTextBodyVisible(int visibility, CommentConfig commentConfig) {
 		this.commentConfig = commentConfig;
-		edittextbody.setVisibility(visibility);
+		llEditComment.setVisibility(visibility);
 
 		measureCircleItemHighAndCommentItemOffset(commentConfig);
 
