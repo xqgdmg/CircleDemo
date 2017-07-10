@@ -12,12 +12,13 @@ import java.io.File;
 
 /**
  * Created by suneee on 2016/6/6.
+ * Glide 磁盘缓存路径和大小
  */
 public class MyGlideModule implements GlideModule {
 
     // 默认存放图片的路径
-    public final static String DEFAULT_SAVE_IMAGE_PATH = Environment.getExternalStorageDirectory() + File.separator + "CircleDemo" + File.separator + "Images"
-            + File.separator;
+    public final static String DEFAULT_SAVE_IMAGE_PATH = Environment.getExternalStorageDirectory()
+            + File.separator + "CircleDemo" + File.separator + "Images" + File.separator;
 
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
