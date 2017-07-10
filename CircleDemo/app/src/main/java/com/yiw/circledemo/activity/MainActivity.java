@@ -32,7 +32,7 @@ import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
-import com.yiw.circledemo.mvp.contract.CircleContract;
+import com.yiw.circledemo.mvp.presenter.CircleActions;
 import com.yiw.circledemo.mvp.presenter.CirclePresenter;
 import com.yiw.circledemo.utils.CommonUtils;
 import com.yiw.circledemo.utils.DatasUtil;
@@ -56,7 +56,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 * @date 2015-12-28 下午4:21:18 
 *
  */
-public class MainActivity extends YWActivity implements CircleContract.View, EasyPermissions.PermissionCallbacks {
+public class MainActivity extends YWActivity implements CircleActions.View, EasyPermissions.PermissionCallbacks {
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	private CircleAdapter circleAdapter;

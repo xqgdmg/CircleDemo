@@ -1,18 +1,20 @@
-package com.yiw.circledemo.mvp.contract;
+package com.yiw.circledemo.mvp.presenter;
 
 import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
+import com.yiw.circledemo.mvp.contract.BaseView;
+import com.yiw.circledemo.mvp.presenter.BasePresenter;
 
 import java.util.List;
 
 /**
  * Created by suneee on 2016/7/15.
  */
-public interface CircleContract {
+public interface CircleActions {
 
-    interface View extends BaseView{
+    interface View extends BaseView {
         void update2DeleteCircle(String circleId);
         void update2AddFavorite(int circlePosition, FavortItem addItem);
         void update2DeleteFavort(int circlePosition, String favortId);
@@ -22,7 +24,7 @@ public interface CircleContract {
         void update2loadData(int loadType, List<CircleItem> datas);
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
         void loadData(int loadType);
         void deleteCircle(final String circleId);
         void addFavort(final int circlePosition);
