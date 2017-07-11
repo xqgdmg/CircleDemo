@@ -56,6 +56,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
 
     private CirclePresenter presenter;
     private Context context;
+
     public void setCirclePresenter(CirclePresenter presenter){
         this.presenter = presenter;
     }
@@ -151,7 +152,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                 public void onClick(View v) {
                     //删除
                     if(presenter!=null){
-                        presenter.deleteCircle(circleId);
+                        presenter.deleteCirclePresenter(circleId);
                     }
                 }
             });
@@ -331,9 +332,9 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                     mLasttime = System.currentTimeMillis();
                     if(presenter != null){
                         if ("赞".equals(actionitem.mTitle.toString())) {
-                            presenter.addFavort(mCirclePosition);
+                            presenter.addFavortPresenter(mCirclePosition);
                         } else {//取消点赞
-                            presenter.deleteFavort(mCirclePosition, mFavorId);
+                            presenter.deleteFavortPresenter(mCirclePosition, mFavorId);
                         }
                     }
                     break;

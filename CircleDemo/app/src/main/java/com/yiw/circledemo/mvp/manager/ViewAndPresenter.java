@@ -17,21 +17,21 @@ import java.util.List;
 public interface ViewAndPresenter {
 
     interface View extends BaseView {
-        void update2DeleteCircle(String circleId);
-        void update2AddFavorite(int circlePosition, FavortItem addItem);
-        void update2DeleteFavort(int circlePosition, String favortId);
-        void update2AddComment(int circlePosition, CommentItem addItem);
-        void update2DeleteComment(int circlePosition, String commentId);
-        void updateEditTextBodyVisible(int visibility, CommentConfig commentConfig);
-        void update2loadData(int loadType, List<CircleItem> datas);
+        void deleteCircleView(String circleId);
+        void addFavoriteView(int circlePosition, FavortItem addItem);
+        void deleteFavortView(int circlePosition, String favortId);
+        void addCommentView(int circlePosition, CommentItem addItem);
+        void feleteCommentView(int circlePosition, String commentId);
+        void editTextBodyVisibleView(int visibility, CommentConfig commentConfig);
+        void loadDataView(int loadType, List<CircleItem> datas);
     }
 
     interface Presenter extends BasePresenter {
-        void loadData(int loadType);
-        void deleteCircle(final String circleId);
-        void addFavort(final int circlePosition);
-        void deleteFavort(final int circlePosition, final String favortId);
-        void deleteComment(final int circlePosition, final String commentId);
+        void loadDataPresenter(int loadType);
+        void deleteCirclePresenter(final String circleId);
+        void addFavortPresenter(final int circlePosition);
+        void deleteFavortPresenter(final int circlePosition, final String favortId);
+        void deleteCommentPresenter(final int circlePosition, final String commentId);
 
     }
 }

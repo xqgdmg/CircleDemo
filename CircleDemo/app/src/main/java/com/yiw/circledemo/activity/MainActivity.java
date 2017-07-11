@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -71,7 +72,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 	private CirclePresenter presenter;
 	private CommentConfig commentConfig;
 	private SuperRecyclerView recyclerView;
-	private RelativeLayout rlOrigin;
+	private RelativeLayout rlRoot;
 	private LinearLayoutManager layoutManager;
     private TitleBar titleBar;
     private final static int TYPE_PULLREFRESH = 1;
@@ -132,30 +133,34 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		recyclerView.addItemDecoration(new DivItemDecoration(2, true));
         recyclerView.getMoreProgressView().getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
+		 // 点击朋友圈，隐藏评论布局
 		recyclerView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (llEditComment.getVisibility() == View.VISIBLE) {
-					updateEditTextBodyVisible(View.GONE, null);
+					editTextBodyVisibleView(View.GONE, null);
 					return true;
 				}
 				return false;
 			}
 		});
 
+		 // 下拉刷新，加载数据
         refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        presenter.loadData(TYPE_PULLREFRESH);
+						 // View 中使用 Presenter 调用 Model
+                        presenter.loadDataPresenter(TYPE_PULLREFRESH);
                     }
                 }, 2000);
             }
         };
         recyclerView.setRefreshListener(refreshListener);
 
+		 // 滑动监听
 		recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -166,22 +171,24 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 				super.onScrollStateChanged(recyclerView, newState);
 				if(newState == RecyclerView.SCROLL_STATE_IDLE){
-					Glide.with(MainActivity.this).resumeRequests();
+					Glide.with(MainActivity.this).resumeRequests(); // 继续加载数据
 				}else{
-					Glide.with(MainActivity.this).pauseRequests();
+					Glide.with(MainActivity.this).pauseRequests(); // 暂停加载数据
 				}
 
 			}
 		});
 
 		circleAdapter = new CircleAdapter(this);
-		circleAdapter.setCirclePresenter(presenter);
+		circleAdapter.setCirclePresenter(presenter); // adapter 使用 presenter 处理 Model
         recyclerView.setAdapter(circleAdapter);
 
 		 // 显示隐藏评论框
 		llEditComment = (LinearLayout) findViewById(R.id.llEditComment);
 		editText = (EditText) findViewById(R.id.circleEt);
 		sendIv = (ImageView) findViewById(R.id.sendIv);
+
+		 // 发表评论
 		sendIv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -194,7 +201,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 					}
 					presenter.addComment(content, commentConfig);
 				}
-				updateEditTextBodyVisible(View.GONE, null);
+				editTextBodyVisibleView(View.GONE, null);
 			}
 		});
 
@@ -222,17 +229,23 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
         textView.setTextColor(getResources().getColor(R.color.white));
     }
 
-
+	/*
+	 * 监听布局变化
+	 */
     private void setViewTreeObserver() {
-		rlOrigin = (RelativeLayout) findViewById(R.id.rlOrigin);
-		final ViewTreeObserver viewTreeObserver = rlOrigin.getViewTreeObserver();
+		rlRoot = (RelativeLayout) findViewById(R.id.rlRoot);
+		final ViewTreeObserver viewTreeObserver = rlRoot.getViewTreeObserver();
 		viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 			@Override
             public void onGlobalLayout() {
-                Rect rect = new Rect();
-				rlOrigin.getWindowVisibleDisplayFrame(rect);
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//					viewTreeObserver.removeOnGlobalLayoutListener(this); // 防止内存泄漏,IllegalStateException: This ViewTreeObserver is not alive, call getViewTreeObserver() again
+					rlRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this); // 防止内存泄漏
+				}
+				Rect rect = new Rect();
+				rlRoot.getWindowVisibleDisplayFrame(rect);
 				int statusBarH =  getStatusBarHeight();//状态栏高度
-                int screenH = rlOrigin.getRootView().getHeight();
+                int screenH = rlRoot.getRootView().getHeight();
 				if(rect.top != statusBarH ){
 					//在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
 					rect.top = statusBarH;
@@ -249,7 +262,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
             	editTextBodyHeight = llEditComment.getHeight();
 
                 if(keyboardH<150){//说明是隐藏键盘的情况
-                    updateEditTextBodyVisible(View.GONE, null);
+                    editTextBodyVisibleView(View.GONE, null);
                     return;
                 }
 				//偏移listview
@@ -262,7 +275,6 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 
 	/**
 	 * 获取状态栏高度
-	 * @return
 	 */
 	private int getStatusBarHeight() {
 		int result = 0;
@@ -273,20 +285,22 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		return result;
 	}
 
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
            if(llEditComment != null && llEditComment.getVisibility() == View.VISIBLE){
-			   updateEditTextBodyVisible(View.GONE, null);
+			   editTextBodyVisibleView(View.GONE, null);
         	   return true;
            }
         }
 		return super.onKeyDown(keyCode, event);
 	}
 
+	/*
+	 * 删除动态
+	 */
 	@Override
-	public void update2DeleteCircle(String circleId) {
+	public void deleteCircleView(String circleId) {
 		List<CircleItem> circleItems = circleAdapter.getDatas();
 		for(int i=0; i<circleItems.size(); i++){
 			if(circleId.equals(circleItems.get(i).getId())){
@@ -297,8 +311,11 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		}
 	}
 
+	/*
+	 * 添加关注
+	 */
 	@Override
-	public void update2AddFavorite(int circlePosition, FavortItem addItem) {
+	public void addFavoriteView(int circlePosition, FavortItem addItem) {
 		if(addItem != null){
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
             item.getFavorters().add(addItem);
@@ -306,8 +323,11 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		}
 	}
 
+	/*
+	 * 取消关注
+	 */
 	@Override
-	public void update2DeleteFavort(int circlePosition, String favortId) {
+	public void deleteFavortView(int circlePosition, String favortId) {
         CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
 		List<FavortItem> items = item.getFavorters();
 		for(int i=0; i<items.size(); i++){
@@ -319,8 +339,11 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		}
 	}
 
+	/*
+	 * 评论
+	 */
 	@Override
-	public void update2AddComment(int circlePosition, CommentItem addItem) {
+	public void addCommentView(int circlePosition, CommentItem addItem) {
 		if(addItem != null){
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
             item.getComments().add(addItem);
@@ -330,8 +353,11 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		 editText.setText("");
 	}
 
+	/*
+	 * 删除评论
+	 */
 	@Override
-	public void update2DeleteComment(int circlePosition, String commentId) {
+	public void feleteCommentView(int circlePosition, String commentId) {
         CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
 		List<CommentItem> items = item.getComments();
 		for(int i=0; i<items.size(); i++){
@@ -344,8 +370,11 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		}
 	}
 
+	/*
+	 * 更新评论框显示隐藏
+	 */
 	@Override
-	public void updateEditTextBodyVisible(int visibility, CommentConfig commentConfig) {
+	public void editTextBodyVisibleView(int visibility, CommentConfig commentConfig) {
 		this.commentConfig = commentConfig;
 		llEditComment.setVisibility(visibility);
 
@@ -362,8 +391,11 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		}
 	}
 
+	/*
+	 * 加载数据
+	 */
     @Override
-    public void update2loadData(int loadType, List<CircleItem> datas) {
+    public void loadDataView(int loadType, List<CircleItem> datas) {
         if (loadType == TYPE_PULLREFRESH){
             recyclerView.setRefreshing(false);
             circleAdapter.setDatas(datas);
@@ -380,30 +412,26 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            presenter.loadData(TYPE_UPLOADREFRESH);
+                            presenter.loadDataPresenter(TYPE_UPLOADREFRESH);
                         }
                     }, 2000);
 
                 }
             }, 1);
         }else{
-            recyclerView.removeMoreListener();
+            recyclerView.removeMoreListener(); // mOnMoreListener = null; 这个有必要？
             recyclerView.hideMoreProgress();
         }
 
     }
 
-
     /**
 	 * 测量偏移量
-	 * @param commentConfig
-	 * @return
 	 */
 	private int getListviewOffset(CommentConfig commentConfig) {
 		if(commentConfig == null)
 			return 0;
 		//这里如果你的listview上面还有其它占高度的控件，则需要减去该控件高度，listview的headview除外。
-		//int listviewOffset = mScreenHeight - mSelectCircleItemH - mCurrentKeyboardH - mEditTextBodyHeight;
         int listviewOffset = screenHeight - selectCircleItemH - currentKeyboardH - editTextBodyHeight - titleBar.getHeight();
 		if(commentConfig.commentType == CommentConfig.Type.REPLY){
 			//回复评论的情况
@@ -413,6 +441,9 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		return listviewOffset;
 	}
 
+	/*
+	 * 测量动态和评论的偏移量
+	 */
 	private void measureCircleItemHighAndCommentItemOffset(CommentConfig commentConfig){
 		if(commentConfig == null)
 			return;

@@ -30,50 +30,50 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 		this.view = view;
 	}
 
-	public void loadData(int loadType){
+	public void loadDataPresenter(int loadType){
 
         List<CircleItem> datas = DatasUtil.createCircleDatas();
         if(view!=null){
-            view.update2loadData(loadType, datas);
+            view.loadDataView(loadType, datas);
         }
 	}
 
 
 	/**
 	 * 
-	* @Title: deleteCircle 
+	* @Title: deleteCirclePresenter
 	* @Description: 删除动态 
 	* @param  circleId     
 	* @return void    返回类型 
 	* @throws
 	 */
-	public void deleteCircle(final String circleId){
+	public void deleteCirclePresenter(final String circleId){
 		circleModel.deleteCircle(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
                 if(view!=null){
-                    view.update2DeleteCircle(circleId);
+                    view.deleteCircleView(circleId);
                 }
 			}
 		});
 	}
 	/**
 	 * 
-	* @Title: addFavort 
+	* @Title: addFavortPresenter
 	* @Description: 点赞
 	* @param  circlePosition     
 	* @return void    返回类型 
 	* @throws
 	 */
-	public void addFavort(final int circlePosition){
+	public void addFavortPresenter(final int circlePosition){
 		circleModel.addFavort(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
 				FavortItem item = DatasUtil.createCurUserFavortItem();
                 if(view !=null ){
-                    view.update2AddFavorite(circlePosition, item);
+                    view.addFavoriteView(circlePosition, item);
                 }
 
 			}
@@ -81,20 +81,20 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	}
 	/**
 	 * 
-	* @Title: deleteFavort 
+	* @Title: deleteFavortPresenter
 	* @Description: 取消点赞 
 	* @param @param circlePosition
 	* @param @param favortId     
 	* @return void    返回类型 
 	* @throws
 	 */
-	public void deleteFavort(final int circlePosition, final String favortId){
+	public void deleteFavortPresenter(final int circlePosition, final String favortId){
 		circleModel.deleteFavort(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
                 if(view !=null ){
-                    view.update2DeleteFavort(circlePosition, favortId);
+                    view.deleteFavortView(circlePosition, favortId);
                 }
 			}
 		});
@@ -124,7 +124,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 					newItem = DatasUtil.createReplyComment(config.replyUser, content);
 				}
                 if(view!=null){
-                    view.update2AddComment(config.circlePosition, newItem);
+                    view.addCommentView(config.circlePosition, newItem);
                 }
 			}
 
@@ -133,20 +133,20 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	
 	/**
 	 * 
-	* @Title: deleteComment 
+	* @Title: deleteCommentPresenter
 	* @Description: 删除评论 
 	* @param @param circlePosition
 	* @param @param commentId     
 	* @return void    返回类型 
 	* @throws
 	 */
-	public void deleteComment(final int circlePosition, final String commentId){
+	public void deleteCommentPresenter(final int circlePosition, final String commentId){
 		circleModel.deleteComment(new IDataRequestListener(){
 
 			@Override
 			public void loadSuccess(Object object) {
                 if(view!=null){
-                    view.update2DeleteComment(circlePosition, commentId);
+                    view.feleteCommentView(circlePosition, commentId);
                 }
 			}
 			
@@ -159,7 +159,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	 */
 	public void showEditTextBody(CommentConfig commentConfig){
         if(view != null){
-            view.updateEditTextBodyVisible(View.VISIBLE, commentConfig);
+            view.editTextBodyVisibleView(View.VISIBLE, commentConfig);
         }
 	}
 

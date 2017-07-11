@@ -84,7 +84,7 @@ public class CommentDialog extends Dialog implements
 			break;
 		case R.id.deleteTv:
 			if (mPresenter != null && mCommentItem != null) {
-				mPresenter.deleteComment(mCirclePosition, mCommentItem.getId());
+				mPresenter.deleteCommentPresenter(mCirclePosition, mCommentItem.getId());
 			}
 			dismiss();
 			break;
