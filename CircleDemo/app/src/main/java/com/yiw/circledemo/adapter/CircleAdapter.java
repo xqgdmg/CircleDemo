@@ -185,7 +185,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                                 if(presenter != null){
                                     CommentConfig config = new CommentConfig();
                                     config.circlePosition = circlePosition;
-                                    config.commentPosition = commentPosition;
+                                    config.commentPosition = commentPosition; // 给评论的位置赋值
                                     config.commentType = CommentConfig.Type.REPLY;
                                     config.replyUser = commentItem.getUser();
                                     presenter.showEditTextBody(config);

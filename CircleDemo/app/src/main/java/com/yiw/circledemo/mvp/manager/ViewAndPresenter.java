@@ -13,6 +13,7 @@ import java.util.List;
  * View extends BaseView
  * Presenter extends BasePresenter
  * 这种写法真是。。。。怎么想的
+ * 只有 VIew Presenter 没有 Model，不标准的写法
  */
 public interface ViewAndPresenter {
 
@@ -23,7 +24,7 @@ public interface ViewAndPresenter {
         void addCommentView(int circlePosition, CommentItem addItem);
         void feleteCommentView(int circlePosition, String commentId);
         void editTextBodyVisibleView(int visibility, CommentConfig commentConfig);
-        void loadDataView(int loadType, List<CircleItem> datas);
+        void loadDataView(int loadType, List<CircleItem> datas); // 加载显示数据
     }
 
     interface Presenter extends BasePresenter {

@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -205,8 +204,8 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 			}
 		});
 
-		 // 监听布局的变化
-		setViewTreeObserver();
+		 // 监听布局的变化，并没有什么用，好尴尬
+//		setViewTreeObserver();
 	}
 
     private void initUploadDialog() {
@@ -232,46 +231,47 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 	/*
 	 * 监听布局变化
 	 */
-    private void setViewTreeObserver() {
-		rlRoot = (RelativeLayout) findViewById(R.id.rlRoot);
-		final ViewTreeObserver viewTreeObserver = rlRoot.getViewTreeObserver();
-		viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-			@Override
-            public void onGlobalLayout() {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//					viewTreeObserver.removeOnGlobalLayoutListener(this); // 防止内存泄漏,IllegalStateException: This ViewTreeObserver is not alive, call getViewTreeObserver() again
-					rlRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this); // 防止内存泄漏
-				}
-				Rect rect = new Rect();
-				rlRoot.getWindowVisibleDisplayFrame(rect);
-				int statusBarH =  getStatusBarHeight();//状态栏高度
-                int screenH = rlRoot.getRootView().getHeight();
-				if(rect.top != statusBarH ){
-					//在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
-					rect.top = statusBarH;
-				}
-                int keyboardH = screenH - (rect.bottom - rect.top);
-				Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = " + keyboardH + " &rect.bottom=" + rect.bottom + " &top=" + rect.top + " &statusBarH=" + statusBarH);
-
-                if(keyboardH == currentKeyboardH){//有变化时才处理，否则会陷入死循环
-                	return;
-                }
-
-				currentKeyboardH = keyboardH;
-            	screenHeight = screenH;//应用屏幕的高度
-            	editTextBodyHeight = llEditComment.getHeight();
-
-                if(keyboardH<150){//说明是隐藏键盘的情况
-                    editTextBodyVisibleView(View.GONE, null);
-                    return;
-                }
-				//偏移listview
-				if(layoutManager!=null && commentConfig != null){
-					layoutManager.scrollToPositionWithOffset(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE, getListviewOffset(commentConfig));
-				}
-            }
-        });
-	}
+//    private void setViewTreeObserver() {
+//		rlRoot = (RelativeLayout) findViewById(R.id.rlRoot);
+//		final ViewTreeObserver viewTreeObserver = rlRoot.getViewTreeObserver();
+//		viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//			@Override
+//            public void onGlobalLayout() {
+//				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+////					viewTreeObserver.removeOnGlobalLayoutListener(this); // 防止内存泄漏,IllegalStateException: This ViewTreeObserver is not alive, call getViewTreeObserver() again
+//					rlRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this); // 防止内存泄漏
+//				}
+//				Rect rect = new Rect();
+//				rlRoot.getWindowVisibleDisplayFrame(rect); // 可见的屏幕宽高，如果被键盘挡住，是屏幕尺寸减去键盘的尺寸
+//				int statusBarH =  getStatusBarHeight();//状态栏高度
+//                int screenH = rlRoot.getRootView().getHeight();
+//				if(rect.top != statusBarH ){
+//					//在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
+//					rect.top = statusBarH;
+//				}
+//                int keyboardH = screenH - (rect.bottom - rect.top);
+//				Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = " + keyboardH + " &rect.bottom=" + rect.bottom + " &top=" + rect.top + " &statusBarH=" + statusBarH);
+//
+//                if(keyboardH == currentKeyboardH){//有变化时才处理，否则会陷入死循环
+//                	return;
+//                }
+//
+//				currentKeyboardH = keyboardH;
+//            	screenHeight = screenH;//应用屏幕的高度
+//            	editTextBodyHeight = llEditComment.getHeight();
+//
+//                if(keyboardH<150){//说明是隐藏键盘的情况
+//                    editTextBodyVisibleView(View.GONE, null);
+//                    return;
+//                }
+//
+//				//偏移listview
+//				if(layoutManager!=null && commentConfig != null){
+//					layoutManager.scrollToPositionWithOffset(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE, getListviewOffset(commentConfig));
+//				}
+//            }
+//        });
+//	}
 
 	/**
 	 * 获取状态栏高度
@@ -378,6 +378,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 		this.commentConfig = commentConfig;
 		llEditComment.setVisibility(visibility);
 
+		 // 测量动态和评论的偏移量
 		measureCircleItemHighAndCommentItemOffset(commentConfig);
 
 		if(View.VISIBLE==visibility){
@@ -393,6 +394,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 
 	/*
 	 * 加载数据
+	 * 与显示相关，所以是View层调用
 	 */
     @Override
     public void loadDataView(int loadType, List<CircleItem> datas) {
@@ -443,6 +445,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 
 	/*
 	 * 测量动态和评论的偏移量
+	 * 计算这个得目的是为了计算 ListView 的偏移量，从而可以滑动它到指定位置
 	 */
 	private void measureCircleItemHighAndCommentItemOffset(CommentConfig commentConfig){
 		if(commentConfig == null)
@@ -468,7 +471,7 @@ public class MainActivity extends YWActivity implements ViewAndPresenter.View, E
 					View parentView = selectCommentItem;
 					do {
 						int subItemBottom = parentView.getBottom();
-						parentView = (View) parentView.getParent();
+						parentView = (View) parentView.getParent(); // 不停找上一个父控件
 						if(parentView != null){
 							selectCommentItemOffset += (parentView.getHeight() - subItemBottom);
 						}

@@ -34,7 +34,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 
         List<CircleItem> datas = DatasUtil.createCircleDatas();
         if(view!=null){
-            view.loadDataView(loadType, datas);
+            view.loadDataView(loadType, datas); // 调用 View 的方法，具体方法由 view 实现
         }
 	}
 
