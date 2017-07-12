@@ -29,7 +29,6 @@ import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
-import com.yiw.circledemo.mvp.manager.ViewAndPresenter;
 import com.yiw.circledemo.mvp.presenter.CirclePresenter;
 import com.yiw.circledemo.mvp.view.BaseView;
 import com.yiw.circledemo.utils.CommonUtils;
@@ -48,11 +47,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 
-* @ClassName: MainActivity 
-* @Description: TODO(这里用一句话描述这个类的作用) 
-* @author yiw
-* @date 2015-12-28 下午4:21:18 
-*
  */
 public class MainActivity extends ImageActivity implements BaseView, EasyPermissions.PermissionCallbacks {
 
@@ -76,14 +70,20 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
     private final static int TYPE_UPLOADREFRESH = 2;
     private UpLoadDialog uploadDialog;
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
+	String videoFile;
+	String [] thum;
 
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 		presenter = new CirclePresenter(this);
+
 		initView();
+
+		initListener();
 
 		initPermission();
 
@@ -97,40 +97,8 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
         });
 	}
 
-
-	private void initPermission() {
-        String[] perms = {Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            // Already have permission, do the thing
-        } else {
-            // Do not have permissions, request them now
-            EasyPermissions.requestPermissions(this, "因为功能需要，需要使用相关权限，请允许",
-                    100, perms);
-        }
-	}
-
-	@Override
-    protected void onDestroy() {
-        if(presenter !=null){
-            presenter.recycle();
-        }
-        super.onDestroy();
-    }
-
-    @SuppressLint({ "ClickableViewAccessibility", "InlinedApi" })
-	private void initView() {
-
-        initTitle();
-        initUploadDialog();
-
-		recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerView);
-		layoutManager = new LinearLayoutManager(this);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.addItemDecoration(new DivItemDecoration(2, true));
-        recyclerView.getMoreProgressView().getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-
-		 // 点击朋友圈，隐藏评论布局
+	private void initListener() {
+		// 点击朋友圈，隐藏评论布局
 		recyclerView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -142,22 +110,22 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 			}
 		});
 
-		 // 下拉刷新，加载数据
-        refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-						 // View 中使用 Presenter 调用 Model
-                        presenter.loadDataPresenter(TYPE_PULLREFRESH);
-                    }
-                }, 2000);
-            }
-        };
-        recyclerView.setRefreshListener(refreshListener);
+		// 下拉刷新，加载数据
+		refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						// View 中使用 Presenter 调用 Model
+						presenter.loadDataPresenter(TYPE_PULLREFRESH);
+					}
+				}, 2000);
+			}
+		};
+		recyclerView.setRefreshListener(refreshListener);
 
-		 // 滑动监听
+		// 滑动监听
 		recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -172,20 +140,10 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 				}else{
 					Glide.with(MainActivity.this).pauseRequests(); // 暂停加载数据
 				}
-
 			}
 		});
 
-		circleAdapter = new CircleAdapter(this);
-		circleAdapter.setCirclePresenter(presenter); // adapter 使用 presenter 处理 Model
-        recyclerView.setAdapter(circleAdapter);
-
-		 // 显示隐藏评论框
-		llEditComment = (LinearLayout) findViewById(R.id.llEditComment);
-		editText = (EditText) findViewById(R.id.circleEt);
-		sendIv = (ImageView) findViewById(R.id.sendIv);
-
-		 // 发表评论
+		// 发表评论
 		sendIv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -201,17 +159,50 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 				editTextBodyVisibleView(View.GONE, null);
 			}
 		});
-
-		 // 监听布局的变化，并没有什么用，好尴尬
-//		setViewTreeObserver();
 	}
 
-    private void initUploadDialog() {
-        uploadDialog = new UpLoadDialog(this);
+
+	private void initPermission() {
+        String[] perms = {Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // Already have permission, do the thing
+        } else {
+            EasyPermissions.requestPermissions(this, "因为功能需要，需要使用相关权限，请允许",100, perms);
+        }
+	}
+
+	@Override
+    protected void onDestroy() {
+        if(presenter !=null){
+            presenter.recycle();
+        }
+        super.onDestroy();
     }
 
-    private void initTitle() {
+    @SuppressLint({ "ClickableViewAccessibility", "InlinedApi" })
+	private void initView() {
 
+        initTitle();
+		uploadDialog = new UpLoadDialog(this);
+
+		recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerView);
+		layoutManager = new LinearLayoutManager(this);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.addItemDecoration(new DivItemDecoration(2, true));
+        recyclerView.getMoreProgressView().getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+		circleAdapter = new CircleAdapter(this);
+		circleAdapter.setCirclePresenter(presenter); // adapter 使用 presenter 处理 Model
+        recyclerView.setAdapter(circleAdapter);
+
+		 // 显示隐藏评论框
+		llEditComment = (LinearLayout) findViewById(R.id.llEditComment);
+		editText = (EditText) findViewById(R.id.circleEt);
+		sendIv = (ImageView) findViewById(R.id.sendIv);
+
+	}
+
+    private void initTitle() {
         titleBar = (TitleBar) findViewById(R.id.main_title_bar);
         titleBar.setTitle("朋友圈");
         titleBar.setTitleColor(getResources().getColor(R.color.white));
@@ -225,63 +216,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
         });
         textView.setTextColor(getResources().getColor(R.color.white));
     }
-
-	/*
-	 * 监听布局变化
-	 */
-//    private void setViewTreeObserver() {
-//		rlRoot = (RelativeLayout) findViewById(R.id.rlRoot);
-//		final ViewTreeObserver viewTreeObserver = rlRoot.getViewTreeObserver();
-//		viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//			@Override
-//            public void onGlobalLayout() {
-//				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-////					viewTreeObserver.removeOnGlobalLayoutListener(this); // 防止内存泄漏,IllegalStateException: This ViewTreeObserver is not alive, call getViewTreeObserver() again
-//					rlRoot.getViewTreeObserver().removeOnGlobalLayoutListener(this); // 防止内存泄漏
-//				}
-//				Rect rect = new Rect();
-//				rlRoot.getWindowVisibleDisplayFrame(rect); // 可见的屏幕宽高，如果被键盘挡住，是屏幕尺寸减去键盘的尺寸
-//				int statusBarH =  getStatusBarHeight();//状态栏高度
-//                int screenH = rlRoot.getRootView().getHeight();
-//				if(rect.top != statusBarH ){
-//					//在这个demo中r.top代表的是状态栏高度，在沉浸式状态栏时r.top＝0，通过getStatusBarHeight获取状态栏高度
-//					rect.top = statusBarH;
-//				}
-//                int keyboardH = screenH - (rect.bottom - rect.top);
-//				Log.d(TAG, "screenH＝ "+ screenH +" &keyboardH = " + keyboardH + " &rect.bottom=" + rect.bottom + " &top=" + rect.top + " &statusBarH=" + statusBarH);
-//
-//                if(keyboardH == currentKeyboardH){//有变化时才处理，否则会陷入死循环
-//                	return;
-//                }
-//
-//				currentKeyboardH = keyboardH;
-//            	screenHeight = screenH;//应用屏幕的高度
-//            	editTextBodyHeight = llEditComment.getHeight();
-//
-//                if(keyboardH<150){//说明是隐藏键盘的情况
-//                    editTextBodyVisibleView(View.GONE, null);
-//                    return;
-//                }
-//
-//				//偏移listview
-//				if(layoutManager!=null && commentConfig != null){
-//					layoutManager.scrollToPositionWithOffset(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE, getListviewOffset(commentConfig));
-//				}
-//            }
-//        });
-//	}
-
-	/**
-	 * 获取状态栏高度
-	 */
-	private int getStatusBarHeight() {
-		int result = 0;
-		int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-		if (resourceId > 0) {
-			result = getResources().getDimensionPixelSize(resourceId);
-		}
-		return result;
-	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -362,7 +296,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 			if(commentId.equals(items.get(i).getId())){
 				items.remove(i);
 				circleAdapter.notifyDataSetChanged();
-                //circleAdapter.notifyItemChanged(circlePosition+1);
 				return;
 			}
 		}
@@ -375,9 +308,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 	public void editTextBodyVisibleView(int visibility, CommentConfig commentConfig) {
 		this.commentConfig = commentConfig;
 		llEditComment.setVisibility(visibility);
-
-		 // 测量动态和评论的偏移量
-		measureCircleItemHighAndCommentItemOffset(commentConfig);
 
 		if(View.VISIBLE==visibility){
 			 editText.requestFocus();
@@ -425,63 +355,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 
     }
 
-    /**
-	 * 测量偏移量
-	 */
-	private int getListviewOffset(CommentConfig commentConfig) {
-		if(commentConfig == null)
-			return 0;
-		//这里如果你的listview上面还有其它占高度的控件，则需要减去该控件高度，listview的headview除外。
-        int listviewOffset = screenHeight - selectCircleItemH - currentKeyboardH - editTextBodyHeight - titleBar.getHeight();
-		if(commentConfig.commentType == CommentConfig.Type.REPLY){
-			//回复评论的情况
-			listviewOffset = listviewOffset + selectCommentItemOffset;
-		}
-        Log.i(TAG, "listviewOffset : " + listviewOffset);
-		return listviewOffset;
-	}
-
-	/*
-	 * 测量动态和评论的偏移量
-	 * 计算这个得目的是为了计算 ListView 的偏移量，从而可以滑动它到指定位置
-	 */
-	private void measureCircleItemHighAndCommentItemOffset(CommentConfig commentConfig){
-		if(commentConfig == null)
-			return;
-
-		int firstPosition = layoutManager.findFirstVisibleItemPosition();
-		//只能返回当前可见区域（列表可滚动）的子项
-        View selectCircleItem = layoutManager.getChildAt(commentConfig.circlePosition + CircleAdapter.HEADVIEW_SIZE - firstPosition);
-
-		if(selectCircleItem != null){
-			selectCircleItemH = selectCircleItem.getHeight();
-		}
-
-		if(commentConfig.commentType == CommentConfig.Type.REPLY){
-			//回复评论的情况
-			CommentListView commentLv = (CommentListView) selectCircleItem.findViewById(R.id.commentList);
-			if(commentLv!=null){
-				//找到要回复的评论view,计算出该view距离所属动态底部的距离
-				View selectCommentItem = commentLv.getChildAt(commentConfig.commentPosition);
-				if(selectCommentItem != null){
-					//选择的commentItem距选择的CircleItem底部的距离
-					selectCommentItemOffset = 0;
-					View parentView = selectCommentItem;
-					do {
-						int subItemBottom = parentView.getBottom();
-						parentView = (View) parentView.getParent(); // 不停找上一个父控件
-						if(parentView != null){
-							selectCommentItemOffset += (parentView.getHeight() - subItemBottom);
-						}
-					} while (parentView != null && parentView != selectCircleItem);
-				}
-			}
-		}
-	}
-
-
-    String videoFile;
-    String [] thum;
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
