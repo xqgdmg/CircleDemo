@@ -13,7 +13,7 @@ import java.util.List;
  * View extends BaseView
  * Presenter extends BasePresenter
  * 这种写法真是。。。。怎么想的
- * 只有 VIew Presenter 没有 Model，不标准的写法
+ * 只有 VIew Presenter 没有 Model，不标准的写法，标准流程是业务层的逻辑在 Model 中实现
  */
 public interface ViewAndPresenter {
 
