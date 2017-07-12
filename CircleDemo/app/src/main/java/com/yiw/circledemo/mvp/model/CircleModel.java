@@ -1,4 +1,4 @@
-package com.yiw.circledemo.mvp.modle;
+package com.yiw.circledemo.mvp.model;
 
 import android.os.AsyncTask;
 
