@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.yiw.circledemo.MyApplication;
 import com.yiw.circledemo.R;
-import com.yiw.circledemo.activity.ImagePagerActivity;
+import com.yiw.circledemo.activity.ViewImageActivity;
 import com.yiw.circledemo.activity.MainActivity;
 import com.yiw.circledemo.adapter.viewholder.CircleViewHolder;
 import com.yiw.circledemo.adapter.viewholder.ImageViewHolder;
@@ -256,13 +256,13 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     //imagesize是作为loading时的图片size
-                                    ImagePagerActivity.ImageSize imageSize = new ImagePagerActivity.ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
+                                    ViewImageActivity.ImageSize imageSize = new ViewImageActivity.ImageSize(view.getMeasuredWidth(), view.getMeasuredHeight());
 
                                     List<String> photoUrls = new ArrayList<String>();
                                     for(PhotoInfo photoInfo : photos){
                                         photoUrls.add(photoInfo.url);
                                     }
-                                    ImagePagerActivity.startImagePagerActivity(((MainActivity) context), photoUrls, position, imageSize);
+                                    ViewImageActivity.startImagePagerActivity(((MainActivity) context), photoUrls, position, imageSize);
 
 
                                 }

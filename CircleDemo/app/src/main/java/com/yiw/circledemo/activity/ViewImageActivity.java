@@ -30,8 +30,9 @@ import java.util.List;
 
 /**
  * Created by yiw on 2016/1/6.
+ * 查看大图
  */
-public class ImagePagerActivity extends YWActivity{
+public class ViewImageActivity extends ImageActivity {
     public static final String INTENT_IMGURLS = "imgurls";
     public static final String INTENT_POSITION = "position";
     public static final String INTENT_IMAGESIZE = "imagesize";
@@ -44,12 +45,11 @@ public class ImagePagerActivity extends YWActivity{
 
 
     public static void startImagePagerActivity(Context context, List<String> imgUrls, int position, ImageSize imageSize){
-        Intent intent = new Intent(context, ImagePagerActivity.class);
+        Intent intent = new Intent(context, ViewImageActivity.class);
         intent.putStringArrayListExtra(INTENT_IMGURLS, new ArrayList<String>(imgUrls));
         intent.putExtra(INTENT_POSITION, position);
         intent.putExtra(INTENT_IMAGESIZE, imageSize);
         context.startActivity(intent);
-
     }
 
     @Override

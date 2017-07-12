@@ -14,9 +14,10 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by yiw on 2017/1/9.
+ * 处理查看大图的页面的不知道什么鬼东西
  */
 
-public class YWActivity extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity {
 
 
     @Override

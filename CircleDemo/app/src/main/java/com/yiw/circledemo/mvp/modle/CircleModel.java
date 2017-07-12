@@ -8,8 +8,7 @@ import com.yiw.circledemo.listener.IDataRequestListener;
  * 
 * @ClassName: CircleModel 
 * @Description: 因为逻辑简单，这里我就不写model的接口了
-* @author yiw
-* @date 2015-12-28 下午3:54:55 
+ *  全部都只调用一个方法 requestServer();
  */
 public class CircleModel {
 	
@@ -18,37 +17,33 @@ public class CircleModel {
 		//
 	}
 
-	public void loadData(final IDataRequestListener listener){
+	public void loadDataModel(final IDataRequestListener listener){
 		requestServer(listener);
 	}
 	
-	public void deleteCircle( final IDataRequestListener listener) {
+	public void deleteCircleModel(final IDataRequestListener listener) {
 		requestServer(listener);
 	}
 
-	public void addFavort( final IDataRequestListener listener) {
+	public void addFavortModel(final IDataRequestListener listener) {
 		requestServer(listener);
 	}
 
-	public void deleteFavort(final IDataRequestListener listener) {
+	public void deleteFavortModel(final IDataRequestListener listener) {
 		requestServer(listener);
 	}
 
-	public void addComment( final IDataRequestListener listener) {
+	public void addCommentModel(final IDataRequestListener listener) {
 		requestServer(listener);
 	}
 
-	public void deleteComment( final IDataRequestListener listener) {
+	public void deleteCommentModel(final IDataRequestListener listener) {
 		requestServer(listener);
 	}
 	
 	/**
 	 * 
-	* @Title: requestServer 
-	* @Description: 与后台交互, 因为demo是本地数据，不做处理
-	* @param  listener    设定文件 
-	* @return void    返回类型 
-	* @throws
+	* 与后台交互, 因为demo是本地数据，不做处理
 	 */
 	private void requestServer(final IDataRequestListener listener) {
 		new AsyncTask<Object, Integer, Object>(){

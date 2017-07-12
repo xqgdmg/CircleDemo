@@ -3,8 +3,6 @@ package com.yiw.circledemo.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -56,7 +53,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 * @date 2015-12-28 下午4:21:18 
 *
  */
-public class MainActivity extends YWActivity implements ViewAndPresenter.View, EasyPermissions.PermissionCallbacks {
+public class MainActivity extends ImageActivity implements ViewAndPresenter.View, EasyPermissions.PermissionCallbacks {
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	private CircleAdapter circleAdapter;

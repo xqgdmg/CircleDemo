@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.ImagePagerActivity"/>
+        <activity android:name=".activity.ViewImageActivity"/>
 
         <!-- 这个就厉害了 -->
         <meta-data

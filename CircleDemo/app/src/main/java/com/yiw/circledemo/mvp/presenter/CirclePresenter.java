@@ -48,7 +48,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	* @throws
 	 */
 	public void deleteCirclePresenter(final String circleId){
-		circleModel.deleteCircle(new IDataRequestListener() {
+		circleModel.deleteCircleModel(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
@@ -67,7 +67,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	* @throws
 	 */
 	public void addFavortPresenter(final int circlePosition){
-		circleModel.addFavort(new IDataRequestListener() {
+		circleModel.addFavortModel(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
@@ -89,7 +89,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	* @throws
 	 */
 	public void deleteFavortPresenter(final int circlePosition, final String favortId){
-		circleModel.deleteFavort(new IDataRequestListener() {
+		circleModel.deleteFavortModel(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
@@ -102,7 +102,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	
 	/**
 	 * 
-	* @Title: addComment 
+	* @Title: addCommentModel
 	* @Description: 增加评论
 	* @param  content
 	* @param  config  CommentConfig
@@ -113,7 +113,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 		if(config == null){
 			return;
 		}
-		circleModel.addComment(new IDataRequestListener() {
+		circleModel.addCommentModel(new IDataRequestListener() {
 
 			@Override
 			public void loadSuccess(Object object) {
@@ -141,7 +141,7 @@ public class CirclePresenter implements ViewAndPresenter.Presenter{
 	* @throws
 	 */
 	public void deleteCommentPresenter(final int circlePosition, final String commentId){
-		circleModel.deleteComment(new IDataRequestListener(){
+		circleModel.deleteCommentModel(new IDataRequestListener(){
 
 			@Override
 			public void loadSuccess(Object object) {

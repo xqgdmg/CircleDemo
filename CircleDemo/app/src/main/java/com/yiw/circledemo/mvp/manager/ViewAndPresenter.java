@@ -4,7 +4,7 @@ import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
 import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
-import com.yiw.circledemo.mvp.contract.BaseView;
+import com.yiw.circledemo.mvp.view.BaseView;
 import com.yiw.circledemo.mvp.presenter.BasePresenter;
 
 import java.util.List;
