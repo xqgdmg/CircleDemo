@@ -31,6 +31,7 @@ import com.yiw.circledemo.bean.CommentItem;
 import com.yiw.circledemo.bean.FavortItem;
 import com.yiw.circledemo.mvp.manager.ViewAndPresenter;
 import com.yiw.circledemo.mvp.presenter.CirclePresenter;
+import com.yiw.circledemo.mvp.view.BaseView;
 import com.yiw.circledemo.utils.CommonUtils;
 import com.yiw.circledemo.utils.DatasUtil;
 import com.yiw.circledemo.widgets.CommentListView;
@@ -53,7 +54,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 * @date 2015-12-28 下午4:21:18 
 *
  */
-public class MainActivity extends ImageActivity implements ViewAndPresenter.View, EasyPermissions.PermissionCallbacks {
+public class MainActivity extends ImageActivity implements BaseView, EasyPermissions.PermissionCallbacks {
 
 	protected static final String TAG = MainActivity.class.getSimpleName();
 	private CircleAdapter circleAdapter;
@@ -531,18 +532,6 @@ public class MainActivity extends ImageActivity implements ViewAndPresenter.View
 				Toast.makeText(MainActivity.this, "RESULT_CANCELED", Toast.LENGTH_LONG).show();
 			}
 		}
-	}
-
-	@Override
-	public void showLoading(String msg) {
-	}
-
-	@Override
-	public void hideLoading() {
-	}
-
-	@Override
-	public void showError(String errorMsg) {
 	}
 
     @Override

@@ -13,26 +13,19 @@ import java.util.List;
  * View extends BaseView
  * Presenter extends BasePresenter
  * 这种写法真是。。。。怎么想的
- * 只有 VIew Presenter 没有 Model，不标准的写法，标准流程是业务层的逻辑在 Model 中实现
  */
 public interface ViewAndPresenter {
 
-    interface View extends BaseView {
-        void deleteCircleView(String circleId);
-        void addFavoriteView(int circlePosition, FavortItem addItem);
-        void deleteFavortView(int circlePosition, String favortId);
-        void addCommentView(int circlePosition, CommentItem addItem);
-        void feleteCommentView(int circlePosition, String commentId);
-        void editTextBodyVisibleView(int visibility, CommentConfig commentConfig);
-        void loadDataView(int loadType, List<CircleItem> datas); // 加载显示数据
-    }
+//    interface View extends BaseView {
+//
+//    }
 
-    interface Presenter extends BasePresenter {
-        void loadDataPresenter(int loadType);
-        void deleteCirclePresenter(final String circleId);
-        void addFavortPresenter(final int circlePosition);
-        void deleteFavortPresenter(final int circlePosition, final String favortId);
-        void deleteCommentPresenter(final int circlePosition, final String commentId);
+//    interface Presenter extends BasePresenter {
+//        void loadDataPresenter(int loadType);
+//        void deleteCirclePresenter(final String circleId);
+//        void addFavortPresenter(final int circlePosition);
+//        void deleteFavortPresenter(final int circlePosition, final String favortId);
+//        void deleteCommentPresenter(final int circlePosition, final String commentId);
+//    }
 
-    }
 }

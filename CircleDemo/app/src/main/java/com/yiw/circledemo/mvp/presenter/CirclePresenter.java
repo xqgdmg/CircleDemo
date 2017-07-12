@@ -9,6 +9,7 @@ import com.yiw.circledemo.bean.FavortItem;
 import com.yiw.circledemo.mvp.manager.ViewAndPresenter;
 import com.yiw.circledemo.mvp.modle.CircleModel;
 import com.yiw.circledemo.listener.IDataRequestListener;
+import com.yiw.circledemo.mvp.view.BaseView;
 import com.yiw.circledemo.utils.DatasUtil;
 
 import java.util.List;
@@ -17,15 +18,17 @@ import java.util.List;
  * 
 * @ClassName: CirclePresenter 
 * @Description: 通知model请求服务器和通知view更新
-* @author yiw
-* @date 2015-12-28 下午4:06:03 
+* 怎么感觉 Presenter 主要是和View 交互的呢
 *
  */
-public class CirclePresenter implements ViewAndPresenter.Presenter{
+public class CirclePresenter implements BasePresenter{
 	private CircleModel circleModel;
-	private ViewAndPresenter.View view;
+	private BaseView view;
 
-	public CirclePresenter(ViewAndPresenter.View view){
+	/*
+	 * 构造方法中传入 接口中的成员变量
+	 */
+	public CirclePresenter(BaseView view){
 		circleModel = new CircleModel();
 		this.view = view;
 	}
