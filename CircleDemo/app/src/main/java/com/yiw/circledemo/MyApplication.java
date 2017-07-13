@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
-
-import com.yiw.qupai.QPManager;
-
 import java.io.File;
 /**
  * 
@@ -27,7 +24,6 @@ public class MyApplication extends Application {
 		super.onCreate();
 		mContext = getApplicationContext();
 		//LeakCanary.install(this);
-        QPManager.getInstance(getApplicationContext()).initRecord();
 
 		MultiDex.install(this);
 	}

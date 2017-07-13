@@ -1,1 +1,1 @@
-include ':app', ':qupai'
+include ':app'

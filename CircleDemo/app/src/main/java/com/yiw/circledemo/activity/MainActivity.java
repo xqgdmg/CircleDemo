@@ -2,14 +2,12 @@ package com.yiw.circledemo.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,10 +15,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -33,15 +29,9 @@ import com.yiw.circledemo.bean.FavortItem;
 import com.yiw.circledemo.mvp.presenter.CirclePresenter;
 import com.yiw.circledemo.mvp.view.BaseView;
 import com.yiw.circledemo.utils.CommonUtils;
-import com.yiw.circledemo.utils.DatasUtil;
-import com.yiw.circledemo.widgets.CommentListView;
 import com.yiw.circledemo.widgets.DivItemDecoration;
 import com.yiw.circledemo.widgets.TitleBar;
 import com.yiw.circledemo.widgets.dialog.UpLoadDialog;
-import com.yiw.qupai.QPManager;
-import com.yiw.qupai.listener.IUploadListener;
-import com.yiw.qupai.result.RecordResult;
-
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -154,6 +144,16 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
                 editTextBodyVisibleView(View.GONE, null);
             }
         });
+
+        // 点击 发布视频
+        TextView textView = (TextView) titleBar.addAction(new TitleBar.TextAction("发布视频") {
+            @Override
+            public void performAction(View view) {
+                // 调起 拍摄界面
+
+            }
+        });
+        textView.setTextColor(getResources().getColor(R.color.white));
     }
 
 
@@ -201,16 +201,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
         titleBar.setTitle("朋友圈");
         titleBar.setTitleColor(getResources().getColor(R.color.white));
         titleBar.setBackgroundColor(getResources().getColor(R.color.title_bg));
-
-         // 点击发布
-        TextView textView = (TextView) titleBar.addAction(new TitleBar.TextAction("发布视频") {
-            @Override
-            public void performAction(View view) {
-                 // 调起 趣拍 拍摄界面
-                QPManager.startRecordActivity(MainActivity.this);
-            }
-        });
-        textView.setTextColor(getResources().getColor(R.color.white));
     }
 
     @Override
@@ -349,58 +339,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
             recyclerView.hideMoreProgress();
         }
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (resultCode == RESULT_OK) {
-            RecordResult result = new RecordResult(data);
-            //得到视频地址，和缩略图地址的数组，返回十张缩略图
-            videoFile = result.getPath();
-            thum = result.getThumbnail();
-            result.getDuration();
-
-            Log.e(TAG, "视频路径:" + videoFile + "图片路径:" + thum[0]);
-
-            QPManager.getInstance(getApplicationContext()).startUpload(videoFile, thum[0], new IUploadListener() {
-                @Override
-                public void preUpload() {
-                    uploadDialog.show();
-                }
-
-                @Override
-                public void uploadComplet(String videoUrl, String imageUrl, String message) {
-                    uploadDialog.hide();
-                    Toast.makeText(MainActivity.this, "上传成功...", Toast.LENGTH_LONG).show();
-
-                    //将新拍摄的video刷新到列表中
-                    circleAdapter.getDatas().add(0, DatasUtil.createVideoItem(videoFile, thum[0]));
-                    circleAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void uploadError(int errorCode, final String message) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            uploadDialog.hide();
-                            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void uploadProgress(int percentsProgress) {
-                    uploadDialog.setPercentsProgress(percentsProgress);
-                }
-            });
-
-        } else {
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(MainActivity.this, "RESULT_CANCELED", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     @Override
