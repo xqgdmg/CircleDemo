@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -46,161 +47,154 @@ import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
 /**
- * 
+ * 朋友圈
  */
 public class MainActivity extends ImageActivity implements BaseView, EasyPermissions.PermissionCallbacks {
 
-	protected static final String TAG = MainActivity.class.getSimpleName();
-	private CircleAdapter circleAdapter;
-	private LinearLayout llEditComment;
-	private EditText editText;
-	private ImageView sendIv;
-	private int screenHeight;
-	private int editTextBodyHeight;
-	private int currentKeyboardH;
-	private int selectCircleItemH;
-	private int selectCommentItemOffset;
-	private CirclePresenter presenter;
-	private CommentConfig commentConfig;
-	private SuperRecyclerView recyclerView;
-	private RelativeLayout rlRoot;
-	private LinearLayoutManager layoutManager;
+    protected static final String TAG = MainActivity.class.getSimpleName();
+    private CircleAdapter circleAdapter;
+    private LinearLayout llEditComment;
+    private EditText editText;
+    private ImageView sendIv;
+    private CirclePresenter presenter;
+    private CommentConfig commentConfig;
+    private SuperRecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
     private TitleBar titleBar;
     private final static int TYPE_PULLREFRESH = 1;
     private final static int TYPE_UPLOADREFRESH = 2;
     private UpLoadDialog uploadDialog;
     private SwipeRefreshLayout.OnRefreshListener refreshListener;
-	String videoFile;
-	String [] thum;
+    String videoFile;
+    String[] thum;
 
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-		presenter = new CirclePresenter(this);
+        presenter = new CirclePresenter(this);
 
-		initView();
+        initView();
 
-		initListener();
+        initListener();
 
-		initPermission();
+        initPermission();
 
         //实现自动下拉刷新功能
-        recyclerView.getSwipeToRefresh().post(new Runnable(){
+        recyclerView.getSwipeToRefresh().post(new Runnable() {
             @Override
             public void run() {
                 recyclerView.setRefreshing(true);//执行下拉刷新的动画
                 refreshListener.onRefresh();//执行数据加载操作
             }
         });
-	}
+    }
 
-	private void initListener() {
-		// 点击朋友圈，隐藏评论布局
-		recyclerView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (llEditComment.getVisibility() == View.VISIBLE) {
-					editTextBodyVisibleView(View.GONE, null);
-					return true;
-				}
-				return false;
-			}
-		});
+    private void initListener() {
+        // 点击朋友圈，隐藏评论布局
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (llEditComment.getVisibility() == View.VISIBLE) {
+                    editTextBodyVisibleView(View.GONE, null);
+                    return true;
+                }
+                return false;
+            }
+        });
 
-		// 下拉刷新，加载数据
-		refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				new Handler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						// View 中使用 Presenter 调用 Model
-						presenter.loadDataPresenter(TYPE_PULLREFRESH);
-					}
-				}, 2000);
-			}
-		};
-		recyclerView.setRefreshListener(refreshListener);
+        // 下拉刷新，加载数据
+        refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // View 中使用 Presenter 调用 Model
+                        presenter.loadDataPresenter(TYPE_PULLREFRESH);
+                    }
+                }, 2000);
+            }
+        };
+        recyclerView.setRefreshListener(refreshListener);
 
-		// 滑动监听
-		recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-			@Override
-			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-				super.onScrolled(recyclerView, dx, dy);
-			}
+        // 滑动监听
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
 
-			@Override
-			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-				super.onScrollStateChanged(recyclerView, newState);
-				if(newState == RecyclerView.SCROLL_STATE_IDLE){
-					Glide.with(MainActivity.this).resumeRequests(); // 继续加载数据
-				}else{
-					Glide.with(MainActivity.this).pauseRequests(); // 暂停加载数据
-				}
-			}
-		});
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Glide.with(MainActivity.this).resumeRequests(); // 继续加载数据
+                } else {
+                    Glide.with(MainActivity.this).pauseRequests(); // 暂停加载数据
+                }
+            }
+        });
 
-		// 发表评论
-		sendIv.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (presenter != null) {
-					//发布评论
-					String content =  editText.getText().toString().trim();
-					if(TextUtils.isEmpty(content)){
-						Toast.makeText(MainActivity.this, "评论内容不能为空...", Toast.LENGTH_SHORT).show();
-						return;
-					}
-					presenter.addComment(content, commentConfig);
-				}
-				editTextBodyVisibleView(View.GONE, null);
-			}
-		});
-	}
+        // 发表评论
+        sendIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (presenter != null) {
+                    //发布评论
+                    String content = editText.getText().toString().trim();
+                    if (TextUtils.isEmpty(content)) {
+                        Toast.makeText(MainActivity.this, "评论内容不能为空...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    presenter.addComment(content, commentConfig);
+                }
+                editTextBodyVisibleView(View.GONE, null);
+            }
+        });
+    }
 
 
-	private void initPermission() {
+    private void initPermission() {
         String[] perms = {Manifest.permission.CALL_PHONE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
         if (EasyPermissions.hasPermissions(this, perms)) {
             // Already have permission, do the thing
         } else {
-            EasyPermissions.requestPermissions(this, "因为功能需要，需要使用相关权限，请允许",100, perms);
+            EasyPermissions.requestPermissions(this, "因为功能需要，需要使用相关权限，请允许", 100, perms);
         }
-	}
+    }
 
-	@Override
+    @Override
     protected void onDestroy() {
-        if(presenter !=null){
+        if (presenter != null) {
             presenter.recycle();
         }
         super.onDestroy();
     }
 
-    @SuppressLint({ "ClickableViewAccessibility", "InlinedApi" })
-	private void initView() {
+    @SuppressLint({"ClickableViewAccessibility", "InlinedApi"})
+    private void initView() {
 
         initTitle();
-		uploadDialog = new UpLoadDialog(this);
+        uploadDialog = new UpLoadDialog(this);
 
-		recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerView);
-		layoutManager = new LinearLayoutManager(this);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.addItemDecoration(new DivItemDecoration(2, true));
+        recyclerView = (SuperRecyclerView) findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DivItemDecoration(2, true));
         recyclerView.getMoreProgressView().getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-		circleAdapter = new CircleAdapter(this);
-		circleAdapter.setCirclePresenter(presenter); // adapter 使用 presenter 处理 Model
+        circleAdapter = new CircleAdapter(this);
+        circleAdapter.setCirclePresenter(presenter); // adapter 使用 presenter 处理 Model
         recyclerView.setAdapter(circleAdapter);
 
-		 // 显示隐藏评论框
-		llEditComment = (LinearLayout) findViewById(R.id.llEditComment);
-		editText = (EditText) findViewById(R.id.circleEt);
-		sendIv = (ImageView) findViewById(R.id.sendIv);
-
-	}
+        // 显示隐藏评论框
+        llEditComment = (LinearLayout) findViewById(R.id.llEditComment);
+        editText = (EditText) findViewById(R.id.circleEt);
+        sendIv = (ImageView) findViewById(R.id.sendIv);
+    }
 
     private void initTitle() {
         titleBar = (TitleBar) findViewById(R.id.main_title_bar);
@@ -208,133 +202,135 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
         titleBar.setTitleColor(getResources().getColor(R.color.white));
         titleBar.setBackgroundColor(getResources().getColor(R.color.title_bg));
 
+         // 点击发布
         TextView textView = (TextView) titleBar.addAction(new TitleBar.TextAction("发布视频") {
             @Override
             public void performAction(View view) {
-				QPManager.startRecordActivity(MainActivity.this);
+                 // 调起 趣拍 拍摄界面
+                QPManager.startRecordActivity(MainActivity.this);
             }
         });
         textView.setTextColor(getResources().getColor(R.color.white));
     }
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-           if(llEditComment != null && llEditComment.getVisibility() == View.VISIBLE){
-			   editTextBodyVisibleView(View.GONE, null);
-        	   return true;
-           }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (llEditComment != null && llEditComment.getVisibility() == View.VISIBLE) {
+                editTextBodyVisibleView(View.GONE, null);
+                return true;
+            }
         }
-		return super.onKeyDown(keyCode, event);
-	}
+        return super.onKeyDown(keyCode, event);
+    }
 
-	/*
-	 * 删除动态
-	 */
-	@Override
-	public void deleteCircleView(String circleId) {
-		List<CircleItem> circleItems = circleAdapter.getDatas();
-		for(int i=0; i<circleItems.size(); i++){
-			if(circleId.equals(circleItems.get(i).getId())){
-				circleItems.remove(i);
-				circleAdapter.notifyDataSetChanged();
-				return;
-			}
-		}
-	}
+    /*
+     * 删除动态
+     */
+    @Override
+    public void deleteCircleView(String circleId) {
+        List<CircleItem> circleItems = circleAdapter.getDatas();
+        for (int i = 0; i < circleItems.size(); i++) {
+            if (circleId.equals(circleItems.get(i).getId())) {
+                circleItems.remove(i);
+                circleAdapter.notifyDataSetChanged();
+                return;
+            }
+        }
+    }
 
-	/*
-	 * 添加关注
-	 */
-	@Override
-	public void addFavoriteView(int circlePosition, FavortItem addItem) {
-		if(addItem != null){
+    /*
+     * 添加关注
+     */
+    @Override
+    public void addFavoriteView(int circlePosition, FavortItem addItem) {
+        if (addItem != null) {
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
             item.getFavorters().add(addItem);
-			circleAdapter.notifyDataSetChanged();
-		}
-	}
+            circleAdapter.notifyDataSetChanged();
+        }
+    }
 
-	/*
-	 * 取消关注
-	 */
-	@Override
-	public void deleteFavortView(int circlePosition, String favortId) {
+    /*
+     * 取消关注
+     */
+    @Override
+    public void deleteFavortView(int circlePosition, String favortId) {
         CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
-		List<FavortItem> items = item.getFavorters();
-		for(int i=0; i<items.size(); i++){
-			if(favortId.equals(items.get(i).getId())){
-				items.remove(i);
-				circleAdapter.notifyDataSetChanged();
-				return;
-			}
-		}
-	}
+        List<FavortItem> items = item.getFavorters();
+        for (int i = 0; i < items.size(); i++) {
+            if (favortId.equals(items.get(i).getId())) {
+                items.remove(i);
+                circleAdapter.notifyDataSetChanged();
+                return;
+            }
+        }
+    }
 
-	/*
-	 * 评论
-	 */
-	@Override
-	public void addCommentView(int circlePosition, CommentItem addItem) {
-		if(addItem != null){
+    /*
+     * 评论
+     */
+    @Override
+    public void addCommentView(int circlePosition, CommentItem addItem) {
+        if (addItem != null) {
             CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
             item.getComments().add(addItem);
-			circleAdapter.notifyDataSetChanged();
-		}
-		//清空评论文本
-		 editText.setText("");
-	}
+            circleAdapter.notifyDataSetChanged();
+        }
+        //清空评论文本
+        editText.setText("");
+    }
 
-	/*
-	 * 删除评论
-	 */
-	@Override
-	public void feleteCommentView(int circlePosition, String commentId) {
+    /*
+     * 删除评论
+     */
+    @Override
+    public void feleteCommentView(int circlePosition, String commentId) {
         CircleItem item = (CircleItem) circleAdapter.getDatas().get(circlePosition);
-		List<CommentItem> items = item.getComments();
-		for(int i=0; i<items.size(); i++){
-			if(commentId.equals(items.get(i).getId())){
-				items.remove(i);
-				circleAdapter.notifyDataSetChanged();
-				return;
-			}
-		}
-	}
+        List<CommentItem> items = item.getComments();
+        for (int i = 0; i < items.size(); i++) {
+            if (commentId.equals(items.get(i).getId())) {
+                items.remove(i);
+                circleAdapter.notifyDataSetChanged();
+                return;
+            }
+        }
+    }
 
-	/*
-	 * 更新评论框显示隐藏
-	 */
-	@Override
-	public void editTextBodyVisibleView(int visibility, CommentConfig commentConfig) {
-		this.commentConfig = commentConfig;
-		llEditComment.setVisibility(visibility);
+    /*
+     * 更新评论框显示隐藏
+     */
+    @Override
+    public void editTextBodyVisibleView(int visibility, CommentConfig commentConfig) {
+        this.commentConfig = commentConfig;
+        llEditComment.setVisibility(visibility);
 
-		if(View.VISIBLE==visibility){
-			 editText.requestFocus();
-			//弹出键盘
-			CommonUtils.showSoftInput( editText.getContext(),  editText);
+        if (View.VISIBLE == visibility) {
+            editText.requestFocus();
+            //弹出键盘
+            CommonUtils.showSoftInput(editText.getContext(), editText);
 
-		}else if(View.GONE==visibility){
-			//隐藏键盘
-			CommonUtils.hideSoftInput( editText.getContext(),  editText);
-		}
-	}
+        } else if (View.GONE == visibility) {
+            //隐藏键盘
+            CommonUtils.hideSoftInput(editText.getContext(), editText);
+        }
+    }
 
-	/*
-	 * 加载数据
-	 * 与显示相关，所以是View层调用
-	 */
+    /*
+     * 加载数据
+     * 与显示相关，所以是View层调用
+     */
     @Override
     public void loadDataView(int loadType, List<CircleItem> datas) {
-        if (loadType == TYPE_PULLREFRESH){
+        if (loadType == TYPE_PULLREFRESH) {
             recyclerView.setRefreshing(false);
             circleAdapter.setDatas(datas);
-        }else if(loadType == TYPE_UPLOADREFRESH){
+        } else if (loadType == TYPE_UPLOADREFRESH) {
             circleAdapter.getDatas().addAll(datas);
         }
         circleAdapter.notifyDataSetChanged();
 
-        if(circleAdapter.getDatas().size()<45 + CircleAdapter.HEADVIEW_SIZE){
+        if (circleAdapter.getDatas().size() < 45 + CircleAdapter.HEADVIEW_SIZE) {
             recyclerView.setupMoreListener(new OnMoreListener() {
                 @Override
                 public void onMoreAsked(int overallItemsCount, int itemsBeforeMore, int maxLastVisiblePosition) {
@@ -348,26 +344,26 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 
                 }
             }, 1);
-        }else{
+        } else {
             recyclerView.removeMoreListener(); // mOnMoreListener = null; 这个有必要？
             recyclerView.hideMoreProgress();
         }
 
     }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		if (resultCode == RESULT_OK) {
-			RecordResult result =new RecordResult(data);
-			//得到视频地址，和缩略图地址的数组，返回十张缩略图
-			videoFile = result.getPath();
-			thum = result.getThumbnail();
-			result.getDuration();
+        if (resultCode == RESULT_OK) {
+            RecordResult result = new RecordResult(data);
+            //得到视频地址，和缩略图地址的数组，返回十张缩略图
+            videoFile = result.getPath();
+            thum = result.getThumbnail();
+            result.getDuration();
 
             Log.e(TAG, "视频路径:" + videoFile + "图片路径:" + thum[0]);
 
-			QPManager.getInstance(getApplicationContext()).startUpload(videoFile, thum[0], new IUploadListener() {
+            QPManager.getInstance(getApplicationContext()).startUpload(videoFile, thum[0], new IUploadListener() {
                 @Override
                 public void preUpload() {
                     uploadDialog.show();
@@ -400,12 +396,12 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
                 }
             });
 
-		} else {
-			if (resultCode == RESULT_CANCELED) {
-				Toast.makeText(MainActivity.this, "RESULT_CANCELED", Toast.LENGTH_LONG).show();
-			}
-		}
-	}
+        } else {
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(MainActivity.this, "RESULT_CANCELED", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
@@ -413,6 +409,6 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        Toast.makeText(this, "您拒绝了相关权限，可能会导致相关功能不可用" , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "您拒绝了相关权限，可能会导致相关功能不可用", Toast.LENGTH_LONG).show();
     }
 }

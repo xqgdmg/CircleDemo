@@ -283,8 +283,7 @@ public class TitleBar extends ViewGroup implements View.OnClickListener {
      * @param index the position at which to add the action
      */
     public View addAction(Action action, int index) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
         View view = inflateAction(action);
         mRightLayout.addView(view, index, params);
         return view;
