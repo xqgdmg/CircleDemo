@@ -14,7 +14,8 @@ import com.yiw.circledemo.R;
 import com.yiw.circledemo.spannable.CircleMovementMethod;
 
 /**
- * Created by yiwei on 16/7/10.
+ * 根据需要显示的 行数来显示
+ * 通过 setMaxLines 设置
  */
 public class ExpandTextView extends LinearLayout {
     public static final int DEFAULT_MAX_LINES = 3;
