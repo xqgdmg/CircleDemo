@@ -19,11 +19,16 @@ public class ImageViewHolder extends CircleViewHolder {
 
     @Override
     public void initSubView(int viewType, ViewStub viewStub) {
+
+         // 手动抛异常
         if(viewStub == null){
             throw new IllegalArgumentException("viewStub is null...");
         }
+
+        // 传说中这个只能加载一次
         viewStub.setLayoutResource(R.layout.viewstub_imgbody);
         View subView = viewStub.inflate();
+
         MultiImageView multiImageView = (MultiImageView) subView.findViewById(R.id.multiImagView);
         if(multiImageView != null){
             this.multiImageView = multiImageView;
