@@ -32,7 +32,7 @@ import com.yiw.circledemo.widgets.CircleVideoView;
 import com.yiw.circledemo.widgets.CommentListView;
 import com.yiw.circledemo.widgets.ExpandTextView;
 import com.yiw.circledemo.widgets.MultiImageView;
-import com.yiw.circledemo.widgets.PraiseListView;
+import com.yiw.circledemo.widgets.PraiseTextView;
 import com.yiw.circledemo.widgets.SnsPopupWindow;
 import com.yiw.circledemo.widgets.dialog.CommentDialog;
 
@@ -158,7 +158,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             });
             if(hasFavort || hasComment){
                 if(hasFavort){//处理点赞列表
-                    holder.praiseListView.setOnItemClickListener(new PraiseListView.OnItemClickListener() {
+                    holder.praiseTextView.setOnItemClickListener(new PraiseTextView.OnItemClickListener() {
                         @Override
                         public void onClick(int position) {
                             String userName = favortDatas.get(position).getUser().getName();
@@ -166,10 +166,10 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                             Toast.makeText(MyApplication.getContext(), userName + " &id = " + userId, Toast.LENGTH_SHORT).show();
                         }
                     });
-                    holder.praiseListView.setDatas(favortDatas);
-                    holder.praiseListView.setVisibility(View.VISIBLE);
+                    holder.praiseTextView.setDatas(favortDatas);
+                    holder.praiseTextView.setVisibility(View.VISIBLE);
                 }else{
-                    holder.praiseListView.setVisibility(View.GONE);
+                    holder.praiseTextView.setVisibility(View.GONE);
                 }
 
                 if(hasComment){//处理评论列表

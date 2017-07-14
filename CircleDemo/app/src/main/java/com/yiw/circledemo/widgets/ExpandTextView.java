@@ -106,8 +106,6 @@ public class ExpandTextView extends LinearLayout {
                     textPlus.setVisibility(View.GONE);
                 }
 
-                //Log.d("onPreDraw", "onPreDraw...");
-                //Log.d("onPreDraw", linCount + "");
                 return true;
             }
 

@@ -22,8 +22,9 @@ import java.util.List;
 
 /**
  * Created by yiwei on 16/7/9.
+ * 类似于 LIstView 可以点击条目
  */
-public class PraiseListView extends TextView{
+public class PraiseTextView extends TextView{
 
 
     private int itemColor;
@@ -39,27 +40,26 @@ public class PraiseListView extends TextView{
         this.onItemClickListener = onItemClickListener;
     }
 
-    public PraiseListView(Context context) {
+    public PraiseTextView(Context context) {
         super(context);
     }
 
-    public PraiseListView(Context context, AttributeSet attrs) {
+    public PraiseTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initAttrs(attrs);
     }
 
-    public PraiseListView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PraiseTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttrs(attrs);
     }
 
     private void initAttrs(AttributeSet attrs) {
-        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.PraiseListView, 0, 0);
+        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.PraiseTextView, 0, 0);
         try {
             //textview的默认颜色
-            itemColor = typedArray.getColor(R.styleable.PraiseListView_item_color, getResources().getColor(R.color.praise_item_default));
-            itemSelectorColor = typedArray.getColor(R.styleable.PraiseListView_item_selector_color, getResources().getColor(R.color.praise_item_selector_default));
-
+            itemColor = typedArray.getColor(R.styleable.PraiseTextView_item_color, getResources().getColor(R.color.praise_item_default));
+            itemSelectorColor = typedArray.getColor(R.styleable.PraiseTextView_item_selector_color, getResources().getColor(R.color.praise_item_selector_default));
         }finally {
             typedArray.recycle();
         }
@@ -68,17 +68,19 @@ public class PraiseListView extends TextView{
     public List<FavortItem> getDatas() {
         return datas;
     }
+
     public void setDatas(List<FavortItem> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
-
 
     public void notifyDataSetChanged(){
         SpannableStringBuilder builder = new SpannableStringBuilder();
         if(datas != null && datas.size() > 0){
             //添加点赞图标
             builder.append(setImageSpan());
+
+             // 设置可以点击条目的
             FavortItem item = null;
             for (int i=0; i<datas.size(); i++){
                 item = datas.get(i);
@@ -92,18 +94,24 @@ public class PraiseListView extends TextView{
         }
 
         setText(builder);
+
+         // 设置点击选中后的颜色
         setMovementMethod(new CircleMovementMethod(itemSelectorColor));
     }
 
-
+    /*
+     * 第一个位置添加点赞的图标
+     */
     private SpannableString setImageSpan(){
         String text = "  ";
         SpannableString imgSpanText = new SpannableString(text);
-        imgSpanText.setSpan(new ImageSpan(MyApplication.getContext(), R.drawable.icon_praise, DynamicDrawableSpan.ALIGN_BASELINE),
-                0 , 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        imgSpanText.setSpan(new ImageSpan(MyApplication.getContext(), R.drawable.icon_praise, DynamicDrawableSpan.ALIGN_BASELINE),0 , 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return imgSpanText;
     }
 
+    /*
+     * 设置可以点击的 span
+     */
     @NonNull
     private SpannableString setClickableSpan(String textStr, final int position) {
         SpannableString subjectSpanText = new SpannableString(textStr);

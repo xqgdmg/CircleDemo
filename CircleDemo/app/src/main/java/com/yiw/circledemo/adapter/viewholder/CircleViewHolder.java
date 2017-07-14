@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.yiw.circledemo.R;
 import com.yiw.circledemo.widgets.CommentListView;
 import com.yiw.circledemo.widgets.ExpandTextView;
-import com.yiw.circledemo.widgets.PraiseListView;
+import com.yiw.circledemo.widgets.PraiseTextView;
 import com.yiw.circledemo.widgets.SnsPopupWindow;
 import com.yiw.circledemo.videolist.model.VideoLoadMvpView;
 import com.yiw.circledemo.videolist.widget.TextureVideoView;
@@ -36,7 +36,7 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
     public TextView deleteBtn;
     public ImageView snsBtn;
     /** 点赞列表*/
-    public PraiseListView praiseListView;
+    public PraiseTextView praiseTextView;
 
     public LinearLayout digCommentBody;
     public View digLine;
@@ -63,7 +63,7 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
         timeTv = (TextView) itemView.findViewById(R.id.timeTv);
         deleteBtn = (TextView) itemView.findViewById(R.id.deleteBtn);
         snsBtn = (ImageView) itemView.findViewById(R.id.snsBtn);
-        praiseListView = (PraiseListView) itemView.findViewById(R.id.praiseListView);
+        praiseTextView = (PraiseTextView) itemView.findViewById(R.id.praiseListView);
 
         digCommentBody = (LinearLayout) itemView.findViewById(R.id.digCommentBody);
         commentList = (CommentListView)itemView.findViewById(R.id.commentList);

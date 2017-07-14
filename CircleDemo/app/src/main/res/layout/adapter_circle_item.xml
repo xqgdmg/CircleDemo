@@ -120,7 +120,7 @@
                 android:paddingTop="12dip">
 
                 <!-- 点赞的人列表 -->
-                <com.yiw.circledemo.widgets.PraiseListView
+                <com.yiw.circledemo.widgets.PraiseTextView
                     android:id="@+id/praiseListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
