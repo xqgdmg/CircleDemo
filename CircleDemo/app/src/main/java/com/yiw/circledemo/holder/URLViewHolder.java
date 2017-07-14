@@ -29,12 +29,13 @@ public class URLViewHolder extends CircleViewHolder{
         }
 
         viewStub.setLayoutResource(R.layout.viewstub_urlbody);
-        View subViw  = viewStub.inflate();
-        LinearLayout urlBodyView = (LinearLayout) subViw.findViewById(R.id.urlBody);
+        View inflateView  = viewStub.inflate();
+
+        LinearLayout urlBodyView = (LinearLayout) inflateView.findViewById(R.id.urlBody);
         if(urlBodyView != null){
             urlBody = urlBodyView;
-            urlImageIv = (ImageView) subViw.findViewById(R.id.urlImageIv);
-            urlContentTv = (TextView) subViw.findViewById(R.id.urlContentTv);
+            urlImageIv = (ImageView) inflateView.findViewById(R.id.urlImageIv);
+            urlContentTv = (TextView) inflateView.findViewById(R.id.urlContentTv);
         }
     }
 }

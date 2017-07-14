@@ -18,9 +18,7 @@ import com.yiw.circledemo.utils.DensityUtil;
 
 /**
  * 朋友圈点赞评论的popupwindow
- * 
- * @author wei.yi
- * 
+ *
  */
 public class SnsPopupWindow extends PopupWindow implements OnClickListener{
 
