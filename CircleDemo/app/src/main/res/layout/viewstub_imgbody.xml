@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
+    <!-- 显示1~N张图片的View -->
     <com.yiw.circledemo.widgets.MultiImageView
         android:id="@+id/multiImagView"
         android:layout_width="match_parent"

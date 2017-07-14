@@ -14,10 +14,10 @@ import com.yiw.circledemo.MyApplication;
 import com.yiw.circledemo.R;
 import com.yiw.circledemo.activity.ViewImageActivity;
 import com.yiw.circledemo.activity.MainActivity;
-import com.yiw.circledemo.adapter.viewholder.CircleViewHolder;
-import com.yiw.circledemo.adapter.viewholder.ImageViewHolder;
-import com.yiw.circledemo.adapter.viewholder.URLViewHolder;
-import com.yiw.circledemo.adapter.viewholder.VideoViewHolder;
+import com.yiw.circledemo.holder.CircleViewHolder;
+import com.yiw.circledemo.holder.ImageViewHolder;
+import com.yiw.circledemo.holder.URLViewHolder;
+import com.yiw.circledemo.holder.VideoViewHolder;
 import com.yiw.circledemo.bean.ActionItem;
 import com.yiw.circledemo.bean.CircleItem;
 import com.yiw.circledemo.bean.CommentConfig;
@@ -86,18 +86,21 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
-        if(viewType == TYPE_HEAD){
+        if(viewType == TYPE_HEAD){  // 头布局
             View headView = LayoutInflater.from(parent.getContext()).inflate(R.layout.head_circle, parent, false);
             viewHolder = new HeaderViewHolder(headView);
         }else{
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_circle_item, parent, false);
 
+            /*
+             * 各种不同的布局
+             */
             if(viewType == CircleViewHolder.TYPE_URL){
-                viewHolder = new URLViewHolder(view);
+                viewHolder = new URLViewHolder(view); // 链接
             }else if(viewType == CircleViewHolder.TYPE_IMAGE){
-                viewHolder = new ImageViewHolder(view);
+                viewHolder = new ImageViewHolder(view); // 图片
             }else if(viewType == CircleViewHolder.TYPE_VIDEO){
-                viewHolder = new VideoViewHolder(view);
+                viewHolder = new VideoViewHolder(view); // 视频
             }
         }
 
@@ -234,6 +237,8 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             });
 
             holder.urlTipTv.setVisibility(View.GONE);
+
+
             switch (holder.viewType) {
                 case CircleViewHolder.TYPE_URL:// 处理链接动态的链接内容和和图片
                     if(holder instanceof URLViewHolder){

@@ -1,4 +1,4 @@
-package com.yiw.circledemo.adapter.viewholder;
+package com.yiw.circledemo.holder;
 
 import android.view.View;
 import android.view.ViewStub;

@@ -59,7 +59,7 @@
                 android:layout_marginTop="5dip"
                 app:showLines="4" />
 
-            <!-- 这是用来放九宫格图片的的 -->
+            <!-- 这是用来放链接，图片，视频的 -->
             <ViewStub
                 android:id="@+id/viewStub"
                 android:layout_width="match_parent"

@@ -28,6 +28,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoView;
+
 /**
  * Created by yiw on 2016/1/6.
  * 查看大图
@@ -96,6 +98,9 @@ public class ViewImageActivity extends ImageActivity {
         imageSize = (ImageSize) getIntent().getSerializableExtra(INTENT_IMAGESIZE);
     }
 
+    /*
+     * 添加小圆点
+     */
     private void addGuideView(LinearLayout guideGroup, int startPos, ArrayList<String> imgUrls) {
         if(imgUrls!=null && imgUrls.size()>0){
             guideViewList.clear();
@@ -122,6 +127,10 @@ public class ViewImageActivity extends ImageActivity {
         return false;
     }
 
+    /*
+     * ImageAdapter
+     * PhotoView 显示大图
+     */
     private static class ImageAdapter extends PagerAdapter{
 
         private List<String> datas = new ArrayList<String>();
@@ -149,12 +158,11 @@ public class ViewImageActivity extends ImageActivity {
             return datas.size();
         }
 
-
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             View view = inflater.inflate(R.layout.item_pager_image, container, false);
             if(view != null){
-                final ImageView imageView = (ImageView) view.findViewById(R.id.image);
+                final PhotoView photoView = (PhotoView) view.findViewById(R.id.image);
 
                 if(imageSize!=null){
                     //预览imageView
@@ -168,8 +176,7 @@ public class ViewImageActivity extends ImageActivity {
 
                 //loading
                 final ProgressBar loading = new ProgressBar(context);
-                FrameLayout.LayoutParams loadingLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                FrameLayout.LayoutParams loadingLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                 loadingLayoutParams.gravity = Gravity.CENTER;
                 loading.setLayoutParams(loadingLayoutParams);
                 ((FrameLayout)view).addView(loading);
@@ -181,23 +188,16 @@ public class ViewImageActivity extends ImageActivity {
                         .diskCacheStrategy(DiskCacheStrategy.ALL)//缓存多个尺寸
                         .thumbnail(0.1f)//先显示缩略图  缩略图为原图的1/10
                         .error(R.drawable.ic_launcher)
-                        .into(new GlideDrawableImageViewTarget(imageView){
+                        .into(new GlideDrawableImageViewTarget(photoView){  // 加载图片并且可以监听进度，加载到 PhotoView 自带各种手势效果
                             @Override
                             public void onLoadStarted(Drawable placeholder) {
                                 super.onLoadStarted(placeholder);
-                               /* if(smallImageView!=null){
-                                    smallImageView.setVisibility(View.VISIBLE);
-                                    Glide.with(context).load(imgurl).into(smallImageView);
-                                }*/
                                 loading.setVisibility(View.VISIBLE);
                             }
 
                             @Override
                             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                                 super.onLoadFailed(e, errorDrawable);
-                                /*if(smallImageView!=null){
-                                    smallImageView.setVisibility(View.GONE);
-                                }*/
                                 loading.setVisibility(View.GONE);
                             }
 
@@ -205,9 +205,6 @@ public class ViewImageActivity extends ImageActivity {
                             public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
                                 super.onResourceReady(resource, animation);
                                 loading.setVisibility(View.GONE);
-                                /*if(smallImageView!=null){
-                                    smallImageView.setVisibility(View.GONE);
-                                }*/
                             }
                         });
 

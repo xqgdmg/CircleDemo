@@ -1,4 +1,4 @@
-package com.yiw.circledemo.adapter.viewholder;
+package com.yiw.circledemo.holder;
 
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
