@@ -8,6 +8,7 @@ import com.yiw.circledemo.widgets.MultiImageView;
 
 /**
  * Created by suneee on 2016/8/16.
+ * 九宫格图片
  */
 public class ImageViewHolder extends CircleViewHolder {
     /** 图片*/
@@ -25,11 +26,11 @@ public class ImageViewHolder extends CircleViewHolder {
             throw new IllegalArgumentException("viewStub is null...");
         }
 
-        // 传说中这个只能加载一次
+        // 传说中这个只能加载一次，它是指一个布局
         viewStub.setLayoutResource(R.layout.viewstub_imgbody);
-        View subView = viewStub.inflate();
+        View inflateView = viewStub.inflate();
 
-        MultiImageView multiImageView = (MultiImageView) subView.findViewById(R.id.multiImagView);
+        MultiImageView multiImageView = (MultiImageView) inflateView.findViewById(R.id.multiImagView);
         if(multiImageView != null){
             this.multiImageView = multiImageView;
         }

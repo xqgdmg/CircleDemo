@@ -18,6 +18,7 @@ import com.yiw.circledemo.videolist.widget.TextureVideoView;
 
 /**
  * Created by yiw on 2016/8/16.
+ * ViewStub 的使用
  */
 public abstract class CircleViewHolder extends RecyclerView.ViewHolder implements VideoLoadMvpView {
 
@@ -46,13 +47,15 @@ public abstract class CircleViewHolder extends RecyclerView.ViewHolder implement
     // ===========================
     public SnsPopupWindow snsPopupWindow;
 
+    /*
+     * 构造传入不同的的 viewType
+     */
     public CircleViewHolder(View itemView, int viewType) {
         super(itemView);
         this.viewType = viewType;
 
         ViewStub viewStub = (ViewStub) itemView.findViewById(R.id.viewStub);
-
-        initSubView(viewType, viewStub);
+        initSubView(viewType, viewStub); // 调用子类的方法
 
         headIv = (ImageView) itemView.findViewById(R.id.headIv);
         nameTv = (TextView) itemView.findViewById(R.id.nameTv);
