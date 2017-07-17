@@ -289,6 +289,8 @@ public class MainActivity extends ImageActivity implements BaseView, EasyPermiss
 
     /*
      * 更新评论框显示隐藏
+     *
+     * 弹出键盘之后，EditText 的高度就是正常的了
      */
     @Override
     public void editTextBodyVisibleView(int visibility, CommentConfig commentConfig) {
