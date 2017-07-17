@@ -342,6 +342,8 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                         CommentConfig config = new CommentConfig();
                         config.circlePosition = mCirclePosition;
                         config.commentType = CommentConfig.Type.PUBLIC;
+
+                        // 直接显示 EditText ; 通过 Present 调用 View 的方法
                         presenter.showEditTextBody(config);
                     }
                     break;
