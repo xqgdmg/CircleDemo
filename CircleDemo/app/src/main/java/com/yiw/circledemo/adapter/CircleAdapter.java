@@ -45,15 +45,8 @@ import java.util.List;
 public class CircleAdapter extends BaseRecycleViewAdapter {
 
     public final static int TYPE_HEAD = 0;
-
-    private static final int STATE_IDLE = 0;
-    private static final int STATE_ACTIVED = 1;
-    private static final int STATE_DEACTIVED = 2;
-    private int videoState = STATE_IDLE;
     public static final int HEADVIEW_SIZE = 1;
-
     int curPlayIndex=-1;
-
     private CirclePresenter presenter;
     private Context context;
 
@@ -113,7 +106,6 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         if(getItemViewType(position)==TYPE_HEAD){
             //HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
         }else{
-
             final int circlePosition = position - HEADVIEW_SIZE;
             final CircleViewHolder holder = (CircleViewHolder) viewHolder;
             final CircleItem circleItem = (CircleItem) datas.get(circlePosition);
@@ -127,7 +119,8 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
             boolean hasFavort = circleItem.hasFavort();
             boolean hasComment = circleItem.hasComment();
 
-            Glide.with(context).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.bg_no_photo).transform(new GlideCircleTransform(context)).into(holder.headIv);
+            Glide.with(context).load(headImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.bg_no_photo)
+                    .transform(new GlideCircleTransform(context)).into(holder.headIv);
 
             holder.nameTv.setText(name);
             holder.timeTv.setText(createTime);
@@ -268,8 +261,6 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
                                         photoUrls.add(photoInfo.url);
                                     }
                                     ViewImageActivity.startImagePagerActivity(((MainActivity) context), photoUrls, position, imageSize);
-
-
                                 }
                             });
                         } else {
@@ -308,6 +299,9 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         super.onViewAttachedToWindow(holder);
     }
 
+    /*
+     * 头部 Holder，只写构造方法
+     */
     public class HeaderViewHolder extends RecyclerView.ViewHolder{
 
         public HeaderViewHolder(View itemView) {
@@ -332,7 +326,7 @@ public class CircleAdapter extends BaseRecycleViewAdapter {
         public void onItemClick(ActionItem actionitem, int position) {
             switch (position) {
                 case 0://点赞、取消点赞
-                    if(System.currentTimeMillis()-mLasttime<700)//防止快速点击操作
+                    if(System.currentTimeMillis() - mLasttime < 700 )//防止快速点击操作
                         return;
                     mLasttime = System.currentTimeMillis();
                     if(presenter != null){

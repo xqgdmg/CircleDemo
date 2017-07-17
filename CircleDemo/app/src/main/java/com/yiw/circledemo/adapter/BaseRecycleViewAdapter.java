@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yiwei on 16/4/9.
+ * 数据，条目监听
  */
 public abstract class BaseRecycleViewAdapter<T,VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
     protected RecycleViewItemListener itemListener;

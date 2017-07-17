@@ -13,6 +13,7 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
+        <!-- 圆形头像，使用的是 Glide -->
         <ImageView
             android:id="@+id/headIv"
             android:layout_width="48dp"
